@@ -1,0 +1,37 @@
+
+<div class="tabs">
+<ul>
+
+
+<% if User.current.allowed_to?({:controller => 'risk_categories', :action => 'index'}, nil , :global => true) %>
+
+<li>
+<%= link_to  l(:categories_label),
+		{ :controller=>"risk_categories",:action => "index" },		
+                :class => ("risk_categories"!= local_assigns[:tab] ? nil : 'selected')		
+		%>		
+</li>
+<% end %>
+
+
+
+<% if User.current.allowed_to?({:controller => 'risks', :action => 'index'}, nil , :global => true) %>
+
+<li>		
+<%= link_to  l(:risks_label),
+		{ :controller=>'risks',:action => 'index' },		
+                :class => ('risks'!= local_assigns[:tab] ? nil : 'selected')						
+		%>
+</li>
+<% end %>
+
+
+
+</ul>
+
+</div>
+
+
+
+
+

@@ -1,0 +1,54 @@
+<%= render :partial => 'project_risk_section/header', :locals => { :tab=>'risk_list' ,  :project_id=> @project.id } %>
+<h2><%= l(:risklist_label) %></h2>
+
+
+<% if !@risks.nil? && @risks.size > 0 %>
+
+
+
+<% form_for :news,:url => { :action => 'index' } do |f| %>
+
+	<%= hidden_field_tag('project_id', @project.id) if @project %>
+	
+<fieldset>
+
+	<p>				
+		<%= l(:field_risk_category) %>
+		<%= select 'risk','risk_category_id' ,@select_categories.collect {|u| [u.name,u.id]} , {:include_blank => 'None' , :selected =>  @risk_category_id ? @risk_category_id.to_i : nil } %>
+		
+		 		
+		<%= submit_tag l(:button_apply)%>		
+	</p>
+		
+</fieldset>
+
+
+
+<table class="list">
+ <thead>
+	<th align="left"><%= l(:field_name) %></th>
+	<th align="left"><%= l(:field_description) %></th>	
+	<th align="left"><%= l(:field_risk_category) %></th>
+	
+ </thead> 	
+ <tbody>
+
+  <% for risk in @risks %>
+    <% unless risk.new_record? %>
+	<tr class="<%= cycle 'odd', 'even' %>">
+		<td><b><%= link_to h(risk.name), { :controller => 'risks' ,  :action => 'retrieve', :id => risk }%></b></td>		
+		<td><%=h(risk.description) %></td>				
+		<td><%=h(risk.risk_category.name) unless risk.risk_category.nil? %></td>						
+	</tr>
+    <% end %>
+  <% end %>
+
+ </tbody>
+</table>
+
+<p class="pagination"><%= pagination_links_full @risk_pages, @risk_count %></p>
+
+<% end %>
+<% else %>
+	<p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>

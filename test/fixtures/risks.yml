@@ -1,0 +1,17 @@
+risk_001:
+  id: 1
+  name: 'name1'
+  description: 'descrption1'  
+  mitigation: 'mitigation'
+  contingency: 'contingency'
+  status: 1
+  risk_category_id: 1
+  
+risk_002:
+  id: 2
+  name: 'name1'
+  description: 'descrption1'  
+  mitigation: 'mitigation'
+  contingency: 'contingency'
+  status: 1
+  risk_category_id: 1

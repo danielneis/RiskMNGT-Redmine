@@ -1,0 +1,31 @@
+<%= render(:partial => 'risk_admin_section/header', :locals => { :tab=>'risks' } ) %>
+
+<h2><%=l(:new_risk_label)%></h2>
+
+<% labelled_tabular_form_for :risk, @risk, :url => { :action => "create" },
+                                           :html => { :id => 'risks-form' } do |f| %>					
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <%= submit_tag l(:button_create) %>
+
+  <%= link_to_remote l(:preview_mitigation_label),
+		   { :url => { :action => 'preview', :opt=>'mitigation' },
+                     :method => 'post',
+                     :update => 'preview',
+                     :with => "Form.serialize('risks-form')"
+                   }, :accesskey => accesskey(:preview) %>
+		
+  <%= link_to_remote l(:preview_contingency_label),
+		   { :url => { :action => 'preview', :opt=>'contingency' },
+                     :method => 'post',
+                     :update => 'preview',
+                     :with => "Form.serialize('risks-form')"
+                   }, :accesskey => accesskey(:preview) %>		
+		
+		
+<% end %>
+
+<div id="preview" class="wiki"></div>
+
+
+
+

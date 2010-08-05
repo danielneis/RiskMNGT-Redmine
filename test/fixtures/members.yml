@@ -1,0 +1,46 @@
+#PROJECT 1
+#admin-project1-manager rol
+members_1: 
+  id: 1
+  created_on: 2006-07-19 19:35:33 +02:00
+  project_id: 1
+  role_id: 1  
+  user_id: 1
+  
+#manager-project1-manager rol  
+members_2: 
+  id: 2
+  created_on: 2006-07-19 19:35:33 +02:00
+  project_id: 1
+  role_id: 1  
+  user_id: 2
+  
+#developer-project1-developer rol  
+members_3: 
+  id: 3
+  created_on: 2006-07-19 19:35:36 +02:00
+  project_id: 1
+  role_id: 2  
+  user_id: 3
+  
+#PROJECT 3 ---> dont have assigned risk_permission  
+members_4:
+  id: 4
+  created_on: 2006-07-19 19:35:33 +02:00
+  project_id: 3
+  role_id: 1  
+  user_id: 1
+    
+members_5: 
+  id: 5
+  created_on: 2006-07-19 19:35:33 +02:00
+  project_id: 1
+  role_id: 1  
+  user_id: 2
+    
+members_6: 
+  id: 6
+  created_on: 2006-07-19 19:35:36 +02:00
+  project_id: 1
+  role_id: 2  
+  user_id: 3  

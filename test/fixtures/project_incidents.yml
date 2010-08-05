@@ -1,0 +1,94 @@
+--- 
+project_incidents_001: 
+ id: 1
+ name: memory shortage
+ description: bla bla bla
+ impact: 1
+ correction_status: 1
+ correction: correction
+ author_id: 1
+ project_id: 1
+ created_on: 2006-07-19 19:13:59 +02:00
+ updated_on: 2006-07-19 19:13:59 +02:00  
+project_incidents_002: 
+ id: 2
+ name: memory shortage
+ description: bla bla bla
+ impact: 2
+ correction_status: 2
+ correction: correction
+ author_id: 1
+ project_id: 1
+ created_on: 2006-07-19 19:13:59 +02:00
+ updated_on: 2006-07-19 19:13:59 +02:00
+project_incidents_003: 
+ id: 3
+ name: memory shortage
+ description: bla bla bla
+ impact: 3
+ correction_status: 3
+ correction: correction 
+ author_id: 1
+ project_id: 1
+ created_on: 2006-07-19 19:13:59 +02:00
+ updated_on: 2006-07-19 19:13:59 +02:00
+ 
+project_incidents_004: 
+ id: 4
+ name: memory shortage
+ description: bla bla bla
+ impact: 4
+ correction_status: 2
+ correction: correction 
+ author_id: 1
+ project_id: 1
+ created_on: 2006-07-19 19:13:59 +02:00
+ updated_on: 2006-07-19 19:13:59 +02:00
+ 
+project_incidents_005: 
+ id: 5
+ name: memory shortage
+ description: bla bla bla
+ impact: 5
+ correction_status: 1
+ correction: correction  
+ author_id: 1
+ project_id: 1
+ created_on: 2006-07-19 19:13:59 +02:00
+ updated_on: 2006-07-19 19:13:59 +02:00
+
+ 
+## PROJECT 3 
+project_incidents_006: 
+ id: 6
+ name: memory shortage
+ description: bla bla bla
+ impact: 1
+ correction_status: 1
+ correction: correction
+ author_id: 1
+ project_id: 3
+ created_on: 2006-07-19 19:13:59 +02:00
+ updated_on: 2006-07-19 19:13:59 +02:00  
+project_incidents_007: 
+ id: 7
+ name: memory shortage
+ description: bla bla bla
+ impact: 2
+ correction_status: 2
+ correction: correction
+ author_id: 1
+ project_id: 3
+ created_on: 2006-07-19 19:13:59 +02:00
+ updated_on: 2006-07-19 19:13:59 +02:00
+project_incidents_008: 
+ id: 8
+ name: memory shortage
+ description: bla bla bla
+ impact: 3
+ correction_status: 3
+ correction: correction 
+ author_id: 1
+ project_id: 3
+ created_on: 2006-07-19 19:13:59 +02:00
+ updated_on: 2006-07-19 19:13:59 +02:00 

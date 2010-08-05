@@ -1,0 +1,11 @@
+<%= render(:partial => 'risk_admin_section/header', :locals => { :tab=>'risk_categories' } ) %>
+
+<h2><%=l(:edit_risk_category_label)%></h2>
+
+<% labelled_tabular_form_for :category, @category, :url => { :action => "update" },
+						   :html => { :id => 'risk_categories-form' } do |f| %>
+
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <%= submit_tag l(:button_edit) %>
+<% end %>
+

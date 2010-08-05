@@ -1,0 +1,28 @@
+<% if !report_name.nil? && !rows.nil? %>
+
+<h3><%=report_name%></h3>
+
+<% if rows.empty? %>
+    <p><i><%=l(:label_no_data)%></i></p>
+<% else %>
+
+<table class="list">
+<thead>
+  <tr>
+	<th style="width:55%"></th>
+	<th align="center" style="width:50%"><%=l(:label_total)%></th>
+  </tr>
+</thead>
+<tbody>
+<% for row in rows %>
+ <tr class="<%= cycle("odd", "even") %>">
+   <td><%= row.name %></td>
+   <td align="center"><%= row.count %></td>
+ </tr>
+<% end %>
+</tbody>
+</table>
+
+<% end %>
+
+<% end %>

@@ -1,0 +1,42 @@
+
+<%= render(:partial => 'risk_admin_section/header', :locals => { :tab=>'risk_categories' } ) %>
+
+
+<h2><%= l(:risk_category_label) %></h2>
+
+
+
+<% unless @category.nil? %>
+
+
+
+
+<div class="box tabular">
+
+<p>
+	<label><%= l(:field_id) %>: </label>
+	<%=h(@category.id) %>
+</p>
+<p>
+	<label><%= l(:field_name) %>: </label>	
+	<%=h(@category.name) %>
+</p>
+<p>
+	<label><%= l(:field_description) %>: </label>
+	<%=h(@category.description) %>
+</p>
+<p>			
+	<label><%= l(:field_status) %>: </label>
+	<%= category_status_label @category.status.to_i %>
+</p>
+
+</div>
+
+
+<% end %>
+
+
+
+
+
+

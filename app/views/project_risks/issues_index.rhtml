@@ -1,0 +1,25 @@
+<%= render :partial => 'project_risk_section/header', :locals => { :tab=>'project_risks' ,  :project_id=> @project } %>
+
+<%= error_messages_for :project_risk %>
+
+<h2><%= l(:issues_of_risk_label, @project_risk.name ) %></h2>
+
+<fieldset>
+<% form_tag({ :action => 'issues_new', :id => @project_risk, :project_id=> @project }) do %>
+  <%= l(:label_issue) %> #  <%= text_field 'issue', :id , :size=> 6 %>
+  <%= submit_tag l(:button_add) %>
+<% end %>
+</fieldset>
+<% if @project_risk.issues.any? %>
+
+ <%= render :partial => 'issues/index',
+ 	    :locals => { :issues=>@project_risk.issues ,  :project_id=> @project, :id=> @project_risk } %>
+
+
+
+
+<% end %>
+
+
+
+

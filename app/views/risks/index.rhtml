@@ -1,0 +1,73 @@
+<%= render :partial => 'risk_admin_section/header', :locals => { :tab=>'risks' } %>
+
+<h2><%= l(:risks_label) %></h2>
+
+<% if !@risks.nil? && @risks.size > 0 %>
+
+
+
+<% form_for :news,:url => { :action => 'index' } do |f| %>
+
+<fieldset>
+
+	<p>
+		<%= l(:field_status) %>
+		<%= select 'risk', 'status' , risk_status_choices  ,  {:include_blank => 'None' , :selected =>  @risk_status ? @risk_status.to_i : nil } %>
+
+
+		<%= l(:field_risk_category) %>
+		<%= select 'risk','risk_category_id' ,@select_categories.collect {|u| [u.name,u.id]} , {:include_blank => 'None' , :selected =>  @risk_category_id ? @risk_category_id.to_i : nil } %>
+		
+		 		
+		<%= submit_tag l(:button_apply)%>		
+	</p>
+		
+</fieldset>
+
+
+
+<table class="list">
+ <thead>
+	<th align="left"><%= l(:field_name) %></th>
+	<th align="left"><%= l(:field_description) %></th>
+	<th align="left"><%= l(:field_status) %></th>
+	<th align="left"><%= l(:field_risk_category) %></th>
+	<th></th>
+	<th></th>
+	
+ </thead> 	
+ <tbody>
+
+  <% for risk in @risks %>
+    <% unless risk.new_record? %>
+	<tr class="<%= cycle 'odd', 'even' %>">
+		<td><b><%= link_to h(risk.name), {  :action => 'retrieve', :id => risk }%></b></td>		
+		<td><%=h(risk.description) %></td>
+		<td><%= risk_status_label risk.status.to_i %></td>
+		
+		<td><%=h(risk.risk_category.name) unless risk.risk_category.nil? %></td>
+		
+		
+		<td align="center"><%= link_to l(:button_edit), {  :action => 'update', :id => risk }, :class => 'icon icon-edit' %></td>
+		<td align="center"><%= link_to l(:button_delete), {:action => 'delete', :id => risk}, :method => :post, :class => 'icon icon-del', :confirm => l(:will_be_deleted_label, risk.name) %></td>
+	</tr>
+    <% end %>
+  <% end %>
+
+ </tbody>
+</table>
+
+<p class="pagination"><%= pagination_links_full @risk_pages, @risk_count %></p>
+
+<% end %>
+<% else %>
+	<p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>
+
+<p><%= link_to l(:new_risk_label), :action => 'create' %></p>
+
+
+
+
+
+

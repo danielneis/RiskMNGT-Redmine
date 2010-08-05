@@ -1,0 +1,14 @@
+<%= render(:partial => 'risk_admin_section/header', :locals => { :tab=>'risk_categories' } ) %>
+
+<h2><%=l(:new_risk_category_label)%></h2>
+
+<% labelled_tabular_form_for :category, @category, :url => { :action => "create" },
+						   :html => { :id => 'risk_categories-form' } do |f| %>		
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <%= submit_tag l(:button_create) %>
+<% end %>
+
+
+
+
+

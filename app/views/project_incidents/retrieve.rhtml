@@ -1,0 +1,142 @@
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 'risks', :plugin => 'redmine_risks' %>
+    <%= stylesheet_link_tag 'risks', :plugin => 'redmine_risks' %>
+<% end %>
+
+<%= render :partial => 'project_risk_section/header', :locals => { :tab=>'project_incidents' ,  :project_id=> @project } %>
+
+
+
+<% unless @incident.nil? %>
+
+<h2><%=l(:incident_label)%> #<%= @incident.id %></h2>
+
+
+<table>
+<th>
+<td align="right"><%= link_to l(:button_edit), {  :action => 'update', :id => @incident.id , :project_id => @project }, :class => 'icon icon-edit' %>
+</td>
+</th>
+</table>
+
+<div class="issue">
+
+
+<h3><%=h @incident.name %></h3>
+
+
+	
+	
+
+<div class="contextual">	
+	<%= link_to l(:properties_label), "#" ,:onclick => 'toggle_visibility("incident-div");' %>
+</div>
+<div style="clear:both; line-height:5px;"> &nbsp;</div>
+
+
+
+<div id="incident-div">
+
+<p><%= authoring @incident.created_on, @incident.author %></p>
+<table width="100%">
+<tr>
+    <td style="width:15%" ><b><%=l(:field_impact)%>:</b></td><td style="width:85%"><%= level_label @incident.impact %></td>
+</tr>
+
+
+</table>
+
+<table width="100%">
+<tr>
+    <td style="width:15%"><b><%=l(:field_open_datetime)%>:</b></td><td style="width:35%"><%= format_date(@incident.open_datetime) %></td>
+    <td style="width:15%"><b><%=l(:field_closed_datetime)%>:</b></td><td style="width:35%"><%= format_date(@incident.closed_datetime) %></td>
+</tr>
+</table>
+
+
+<table width="100%">
+
+ <tr>
+    <td style="width:15%" ><b><%=l(:field_description)%>:</b></td><td style="width:90%"><%=h(@incident.description) %></td>
+ </tr>
+
+</table>
+
+
+</div>
+
+
+<div class="contextual">	
+	<%= link_to l(:field_correction), "#" ,:onclick => 'toggle_visibility("correction-div");' %>
+</div>
+<hr><div id="contextual_clr"> &nbsp;</div></hr>
+
+
+<div id="correction-div" style="display:none;">
+ <p>
+	<label><b><%= l(:field_correction_status) %>: </b></label>	
+	<td><%= status_label @incident.correction_status %></td>
+ <p/>
+
+ <p>
+	<label><b><%= l(:field_resolution_datetime) %></b> </label>	
+	<%= format_date(@incident.resolution_datetime) %>
+ <p/>
+
+
+ <p>
+	<label><b><%= l(:field_correction) %></b> </label>	
+	<%= textilizable(@incident.correction) %>
+ <p/>
+</div>
+
+
+<div  class="contextual">	
+	<%= link_to l(:issues_count_label, @incident.issues.count), "#" ,:onclick => 'toggle_visibility("issues-div");' %>	
+</div>
+
+<hr><div id="contextual_clr"> &nbsp;</div></hr>
+
+<div id="issues-div" style="display:none;">
+
+
+ <% if @incident.issues.any? %>
+
+  <table class="list">
+   <thead>
+	<th align="left"><%= l(:field_name) %></th>
+	<th align="left"><%= l(:field_subject) %></th>
+	<th align="left"><%= l(:field_status) %></th>
+	<th align="left"><%= l(:field_start_date) %></th>
+	<th align="left"><%= l(:field_due_date) %></th>			
+   </thead>
+   <tbody>
+    <% @incident.issues.each do |issue| %>
+      <tr class="<%= cycle 'odd', 'even' %>">
+	<td><%= h(issue.project) + ' - ' if Setting.cross_project_issue_relations? %> <%= link_to_issue issue %></td>	
+	<td><%=issue.subject %></td>
+	<td><%= issue.status.name %></td>
+	<td><%= format_date(issue.start_date) %></td>
+	<td><%= format_date(issue.due_date) %></td>															
+      </tr>
+     </tbody>
+    <% end %>
+  </table>
+ <% end %>
+
+</div>
+
+	
+
+</div>
+
+
+
+
+<% end %>
+
+
+
+
+
+

@@ -1,0 +1,143 @@
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 'risks', :plugin => 'redmine_risks' %>
+    <%= stylesheet_link_tag 'risks', :plugin => 'redmine_risks' %>
+<% end %>
+
+<%= render :partial => 'project_risk_section/header', :locals => { :tab=>'project_risks' ,  :project_id=> @project } %>
+
+
+
+
+
+
+<% unless @project_risk.nil? %>
+
+<h2><%=l(:risk_label)%> #<%= @project_risk.id %></h2>
+
+
+<table>
+<th>
+<td align="right"><%= link_to l(:button_edit), {  :action => 'update', :id => @project_risk.id , :project_id => @project }, :class => 'icon icon-edit' %>
+</td>
+</th>
+</table>
+<div class="issue">
+
+<h3><%=h @project_risk.name %></h3>
+
+
+	
+	
+
+<div class="contextual">	
+	<%= link_to l(:properties_label), "#" ,:onclick => 'toggle_visibility("risk-div");' %>
+</div>
+<div style="clear:both; line-height:5px;"> &nbsp;</div>
+
+
+
+<div id="risk-div">
+
+<p><%= authoring @project_risk.created_on, @project_risk.author %></p>
+<table width="100%">
+<tr>
+    <td style="width:15%" ><b><%=l(:field_impact)%>:</b></td><td style="width:35%"><%= level_label @project_risk.impact %></td>
+    <td style="width:15%" ><b><%=l(:field_probability)%>:</b></td><td style="width:35%"><%= level_label @project_risk.probability %></td>
+</tr>
+
+
+<tr>
+    <td ><b><%=l(:field_risk_category)%>:</b></td><td><%= link_to h(@project_risk.risk_category.name), {  :controller => 'risk_categories' ,  :action => 'retrieve', :id =>  @project_risk.risk_category } unless @project_risk.risk_category.nil? %></td>
+    <td ><b><%=l(:field_risk)%>:</b></td><td><%= link_to h(@project_risk.risk.name), {  :controller => 'risks' ,  :action => 'retrieve', :id =>  @project_risk.risk } unless @project_risk.risk.nil? %></td>
+</tr>
+<tr>
+    <td style="width:15%"><b><%=l(:field_detection_datetime)%>:</b></td><td style="width:35%"><%= format_date(@project_risk.detection_datetime) %></td>
+    <td style="width:15%"><b><%=l(:field_closed_datetime)%>:</b></td><td style="width:35%"><%= format_date(@project_risk.closed_datetime) %></td>
+</tr>
+
+</table>
+
+<table width="100%">
+
+ <tr>
+    <td style="width:15%" ><b><%=l(:field_description)%>:</b></td><td style="width:90%"><%=h(@project_risk.description) %></td>
+ </tr>
+
+</table>
+
+</div>
+
+
+<div class="contextual">	
+	<%= link_to l(:field_mitigation), "#" ,:onclick => 'toggle_visibility("mitigation-div");' %>
+</div>
+<hr><div id="contextual_clr"> &nbsp;</div></hr>
+
+
+<div id="mitigation-div" style="display:none;">
+ <p>
+	<label><b><%= l(:field_mitigation_status) %>: </b></label>	
+	<td><%= status_label @project_risk.mitigation_status %></td>
+ <p/>
+
+
+ <p>
+	<label><b><%= l(:field_resolution_datetime) %></b> </label>	
+	<%= format_date(@project_risk.resolution_datetime) %>
+ <p/>
+
+ <p>
+	<label><b><%= l(:field_mitigation) %></b> </label>	
+	<%= textilizable(@project_risk.mitigation) %>
+ <p/>
+</div>
+
+<div  class="contextual">	
+	<%= link_to l(:field_contingency), "#" ,:onclick => 'toggle_visibility("contingency-div");' %>	
+</div>
+<hr><div id="contextual_clr"> &nbsp;</div></hr>
+
+<div id="contingency-div" style="display:none;">
+ <p>
+	<label><b><%= l(:field_contingency) %></b> </label>	
+	<%= textilizable(@project_risk.contingency) %>
+ <p/>
+</div>
+
+
+
+<div  class="contextual">	
+	<%= link_to l(:issues_count_label, @project_risk.issues.count), "#" ,:onclick => 'toggle_visibility("issues-div");' %>	
+</div>
+<hr><div id="contextual_clr"> &nbsp;</div></hr>
+
+<div id="issues-div" style="display:none;">
+
+
+ <% if @project_risk.issues.any? %>
+
+  <table class="list">
+   <thead>
+	<th align="left"><%= l(:field_name) %></th>
+	<th align="left"><%= l(:field_subject) %></th>
+	<th align="left"><%= l(:field_status) %></th>
+	<th align="left"><%= l(:field_start_date) %></th>
+	<th align="left"><%= l(:field_due_date) %></th>			
+   </thead>
+   <tbody>
+    <% @project_risk.issues.each do |issue| %>
+      <tr class="<%= cycle 'odd', 'even' %>">
+	<td><%= h(issue.project) + ' - ' if Setting.cross_project_issue_relations? %> <%= link_to_issue issue %></td>	
+	<td><%=issue.subject %></td>
+	<td><%= issue.status.name %></td>
+	<td><%= format_date(issue.start_date) %></td>
+	<td><%= format_date(issue.due_date) %></td>															
+      </tr>
+     </tbody>
+    <% end %>
+  </table>
+ <% end %>
+
+</div>
+</div>
+<% end %>

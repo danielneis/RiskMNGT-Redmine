@@ -1,0 +1,4 @@
+= risks
+
+Isotrol RiskMNGT Redmine Plugin 1.0. 
+

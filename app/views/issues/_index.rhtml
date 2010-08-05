@@ -1,0 +1,20 @@
+
+<table class="list">
+<tbody>
+<% issues.each do |issue| %>
+<tr class="<%= cycle 'odd', 'even' %>">
+	<td><%= h(issue.project) + ' - ' if Setting.cross_project_issue_relations? %> <%= link_to_issue issue %></td>	
+	<td><%=issue.subject %></td>
+	<td><%= issue.status.name %></td>
+	<td><%= format_date(issue.start_date) %></td>
+	<td><%= format_date(issue.due_date) %></td>	
+	<td><%= link_to l(:button_delete) , {  :action => 'issues_delete', :id => id , :project_id => project_id , :issue_id => issue.id }, :method => :post, :class => 'icon icon-del', :confirm => l(:will_be_deleted_label, issue.id) %></td>													
+</tr>
+</tbody>
+<% end %>
+</table>
+
+
+
+
+

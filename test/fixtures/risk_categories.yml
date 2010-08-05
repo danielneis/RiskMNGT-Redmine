@@ -1,0 +1,35 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+risk_category_001:
+  id: 1
+  name: 'offer'
+  description: 'offer description'
+  status: 1
+
+risk_category_002:
+  id: 2
+  name: 'execution'
+  description: 'execution description'
+  status: 1
+  
+  
+risk_category_003:
+  id: 3
+  name: 'execution'
+  description: 'execution description'
+  status: 0
+  
+# Any risk must belong to this category, in order the category can be deleted
+risk_category_004:
+  id: 4
+  name: 'To be deleted'
+  description: 
+  status: 0
+
+# Any risk must belong to this category, in order the category can be deleted  
+risk_category_005:
+  id: 5
+  name: 'To be deleted 2'
+  description: 
+  status: 0    
+

@@ -1,0 +1,10 @@
+
+<h3><%= l(:projectrisks_label) %></h3>
+<%= link_to l(:risk_exposure_label),  {:tab => 'risk_exposure', :project_id => @project} %><br />
+<%= link_to l(:field_impact),  {:tab => 'risk_impact', :project_id => @project} %><br />
+<%= link_to l(:field_probability),  {:tab => 'risk_probability', :project_id => @project} %><br />
+<%= link_to l(:field_mitigation_status), {:tab => 'risk_status', :project_id => @project } %><br />
+<%= link_to l(:risk_category_label), {:tab => 'risk_category', :project_id => @project } %><br />
+<h3><%= l(:projectincidents_label) %></h3>
+<%= link_to l(:field_correction_status), {:tab => 'incident_status', :project_id => @project} %><br />
+<%= link_to l(:field_impact), {:tab => 'incident_impact', :project_id => @project} %><br />
