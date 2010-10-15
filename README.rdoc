@@ -14,7 +14,15 @@ Started by Isotrol and fostered by Daniel Neis Araujo.
 6. Access you project, enable the "Risks" module
 7. Manage your risks in the "Risks" project menu tab
 
+= Known Bugs
+
+* I18n::MissingInterpolationArgument in Project_risks#issues_index, after associate an issue with the risk
+* I18n::MissingInterpolationArgument in Project_incidents#issues_index, after associate and issue with the incident
+
 = Roadmap
 
 * Replace "Preview mitigation" and "Preview contingency" with just one preview for the whole risk
 * Made categories not mandatory when creating risks
+* Allow to create categories in project level
+* Show filter in risks index when there is no data to display
+* Show filter in incidents index when there is no data to display

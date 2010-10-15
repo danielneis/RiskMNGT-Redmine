@@ -53,7 +53,8 @@ class BaseRiskApplicationController < ApplicationController
   protected
   def find_project
     @project = Project.find( params[:project_id] )
-    rescue ActiveRecord::RecordNotFound render_404
+    rescue ActiveRecord::RecordNotFound
+      render_404
   end
 
   protected

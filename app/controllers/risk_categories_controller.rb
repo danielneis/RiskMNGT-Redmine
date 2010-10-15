@@ -84,6 +84,7 @@ class RiskCategoriesController < BaseRiskApplicationController
   #It renders to _render_404 when the _category_ cannot be found
   def find_risk_category
     @category = RiskCategory.find(params[:id])
-    rescue ActiveRecord::RecordNotFound render_404
+    rescue ActiveRecord::RecordNotFound
+      render_404
   end
 end

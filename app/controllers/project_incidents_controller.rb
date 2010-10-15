@@ -129,6 +129,7 @@ class ProjectIncidentsController < BaseRiskApplicationController
   #It renders to _render_404 when the _id_ cannot be found
   def find_project_incident
     @incident = ProjectIncident.find params[:id], :conditions=>"project_id=#{@project.id}"
-    rescue ActiveRecord::RecordNotFound render_404
+    rescue ActiveRecord::RecordNotFound
+      render_404
   end
 end

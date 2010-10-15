@@ -50,7 +50,6 @@ class ProjectRisksController < BaseRiskApplicationController
   def index
     @select_categories = RiskCategory.find :all, :conditions=>["status = ?", RiskCategory::STATUS_ACTIVE.to_i]
 
-
     @risk_mitigation_status = ( params[:risk] && has_value_params( params[:risk][:mitigation_status] ) ? params[:risk][:mitigation_status] : nil )
     @risk_category_id = ( params[:risk] && has_value_params( params[:risk][:risk_category_id] ) ? params[:risk][:risk_category_id] : nil )
     @risk_probability = ( params[:risk] && has_value_params( params[:risk][:probability] ) ? params[:risk][:probability] : nil )
@@ -62,9 +61,7 @@ class ProjectRisksController < BaseRiskApplicationController
 
     @risk_count = ProjectRisk.count(:conditions => conditionStm)
     @risk_pages = Paginator.new self, @risk_count, limit, params['page']
-    @risks = ProjectRisk.find :all, :conditions => conditionStm ,
-                              :limit  =>  limit,
-                              :offset =>  @risk_pages.current.offset
+    @risks = ProjectRisk.find :all, :conditions => conditionStm, :limit  => limit, :offset => @risk_pages.current.offset
 
     unless @exposure.nil?
 
@@ -183,6 +180,7 @@ class ProjectRisksController < BaseRiskApplicationController
   #Renders to _render_404 when the _project_risk_ cannot be found
   def find_project_risk
     @project_risk = ProjectRisk.find params[:id], :conditions=>"project_id=#{@project.id}"
-    rescue ActiveRecord::RecordNotFound render_404
+    rescue ActiveRecord::RecordNotFound
+      render_404
   end
 end
