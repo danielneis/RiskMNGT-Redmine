@@ -2,9 +2,7 @@
 
 <p><%= link_to l(:new_risk_label), :action => 'create', :project_id => @project %></p>
 
-<% if !@risks.nil? && @risks.size > 0 %>
-
-    <% form_for :news,:url => { :action => 'index', :project_id=> @project } do |f| %>
+<% form_for :news,:url => { :action => 'index', :project_id=> @project } do |f| %>
 
     <fieldset>
       <p>
@@ -26,6 +24,9 @@
         <%= submit_tag l(:button_apply)%>
       </p>
     </fieldset>
+<% end %>
+
+<% if !@risks.nil? && @risks.size > 0 %>
 
     <table class="list">
       <thead>
@@ -64,7 +65,6 @@
        </tbody>
     </table>
     <p class="pagination"><%= pagination_links_full @risk_pages, @risk_count %></p>
-    <% end %>
 <% else %>
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
