@@ -69,6 +69,13 @@
 
 <div class="issue details">
   <h3><%=l(:field_contingency)%></h3>
+
+  <table class="attributes">
+    <tr>
+      <th><%=l(:field_contingency_responsable)%>:</th><td><%= @project_risk.contingency_responsable %></td>
+    </tr>
+  </table>
+
   <p><strong><%=l(:field_description)%></strong></p>
   <div class="wiki">
     <%= textilizable(@project_risk.contingency) %></p>
