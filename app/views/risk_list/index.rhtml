@@ -1,5 +1,3 @@
-<%= render :partial => 'project_risk_section/header', :locals => { :tab=>'risk_list' ,  :project_id=> @project.id } %>
-
 <h2><%= l(:risklist_label) %></h2>
 
 <% if !@risks.nil? && @risks.size > 0 %>
@@ -38,4 +36,8 @@
     <% end %>
 <% else %>
   <p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>
+
+<% content_for :sidebar do %>
+    <%= render :partial => 'project_risks/sidebar' %>
 <% end %>

@@ -1,7 +1,6 @@
-<%= render :partial => 'project_risk_section/header', :locals => { :tab=>'project_incidents' ,  :project_id=> @project } %>
-
 <h2><%= l(:projectincidents_label) %></h2>
 
+<p><%= link_to l(:new_incident_label), :action => 'create', :project_id => @project %></p>
 <% if !@incidents.nil? && @incidents.size > 0 %>
 
     <% form_for :news,:url => { :action => 'index', :project_id=> @project } do |f| %>
@@ -53,4 +52,6 @@
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
 
-<p><%= link_to l(:new_incident_label), :action => 'create', :project_id => @project %></p>
+<% content_for :sidebar do %>
+    <%= render :partial => 'project_risks/sidebar' %>
+<% end %>

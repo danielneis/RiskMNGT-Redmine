@@ -1,6 +1,6 @@
-<%= render :partial => 'project_risk_section/header', :locals => { :tab=>'project_risks' ,  :project_id=> @project } %>
-
 <h2><%= l(:projectrisks_label) %></h2>
+
+<p><%= link_to l(:new_risk_label), :action => 'create', :project_id => @project %></p>
 
 <% if !@risks.nil? && @risks.size > 0 %>
 
@@ -69,4 +69,6 @@
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
 
-<p><%= link_to l(:new_risk_label), :action => 'create', :project_id => @project %></p>
+<% content_for :sidebar do %>
+    <%= render :partial => 'sidebar' %>
+<% end %>

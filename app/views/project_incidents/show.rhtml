@@ -3,8 +3,6 @@
     <%= stylesheet_link_tag 'risks', :plugin => 'redmine_risks' %>
 <% end %>
 
-<%= render :partial => 'project_risk_section/header', :locals => { :tab=>'project_incidents' ,  :project_id=> @project } %>
-
 <% unless @incident.nil? %>
 
 <h2><%=l(:incident_label)%> #<%= @incident.id %></h2>
@@ -80,4 +78,8 @@
     <% end %>
   </div>
 </div>
+<% end %>
+
+<% content_for :sidebar do %>
+    <%= render :partial => 'project_risks/sidebar' %>
 <% end %>

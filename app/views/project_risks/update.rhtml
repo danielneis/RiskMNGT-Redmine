@@ -1,38 +1,30 @@
-<%= render :partial => 'project_risk_section/header', :locals => { :tab=>'project_risks' ,  :project_id=> @project } %>
-
 <h2><%=l(:edit_risk_category_label)%></h2>
 
 <% labelled_tabular_form_for :project_risk, @project_risk, :url => { :action => "update",  :project_id=> @project },
                                            :html => { :id => 'project_risks-form' } do |f| %>
 
-					
+
   <%= render :partial => 'form', :locals => { :f => f } %>
   <%= submit_tag l(:button_edit) %>
 
   <%= link_to_remote l(:preview_mitigation_label),
-		   { :url => { :action => 'preview', :opt=>'mitigation' },
+       { :url => { :action => 'preview', :opt=>'mitigation' },
                      :method => 'post',
                      :update => 'preview',
                      :with => "Form.serialize('project_risks-form')"
                    }, :accesskey => accesskey(:preview) %>
-		
+
   <%= link_to_remote l(:preview_contingency_label),
-		   { :url => {:action => 'preview', :opt=>'contingency' },
+       { :url => {:action => 'preview', :opt=>'contingency' },
                      :method => 'post',
                      :update => 'preview',
                      :with => "Form.serialize('project_risks-form')"
-                   }, :accesskey => accesskey(:preview) %>		
-		
-		
-<% end %>
+                   }, :accesskey => accesskey(:preview) %>
 
+
+<% end %>
 <div id="preview" class="wiki"></div>
 
-
-
-
-
-
-
-
-
+<% content_for :sidebar do %>
+    <%= render :partial => 'project_risks/sidebar' %>
+<% end %>
