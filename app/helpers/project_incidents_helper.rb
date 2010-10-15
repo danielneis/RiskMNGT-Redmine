@@ -34,33 +34,26 @@
 #  under the Licence.
 
 module ProjectIncidentsHelper
-	
-  #= correction_status_values
-  #=== { 0 => "None", 1 => "Resolved", 2=>"Not resolved", 3=>"In progress" }
-  #* @returns= hash whose keys are the correction status value and its values are the translated name of the specific correction status	
-  def correction_status_values
-	  h = {}	
-	  h[ProjectIncident::CORRECTION_STATUS_NONE.to_i] = l(:none_label)
-	  h[ProjectIncident::CORRECTION_STATUS_RESOLVED.to_i] = l(:resolved_label)
-	  h[ProjectIncident::CORRECTION_STATUS_NOT_RESOLVED.to_i] = l(:not_resolved_label)
-	  h[ ProjectIncident::CORRECTION_STATUS_IN_PROGRESS.to_i] =  l(:in_progress_label)
-	  h			
-  end	
 
-	
-  #= correction_status_choices
-  #* @returns= collection composed of labels of incident correctionstatus and its respective values.
-  def correction_status_choices
-	  correction_status_values.invert.to_a.sort_by {|a,b| b}			
+  #{ 0 => "None", 1 => "Resolved", 2=>"Not resolved", 3=>"In progress" }
+  #* @returns= hash whose keys are the correction status value and its values are the translated name of the specific correction status
+  def correction_status_values
+    h = {}
+    h[ProjectIncident::CORRECTION_STATUS_NONE.to_i] = l(:none_label)
+    h[ProjectIncident::CORRECTION_STATUS_RESOLVED.to_i] = l(:resolved_label)
+    h[ProjectIncident::CORRECTION_STATUS_NOT_RESOLVED.to_i] = l(:not_resolved_label)
+    h[ ProjectIncident::CORRECTION_STATUS_IN_PROGRESS.to_i] =  l(:in_progress_label)
+    h
   end
 
+  #* @returns= collection composed of labels of incident correctionstatus and its respective values.
+  def correction_status_choices
+    correction_status_values.invert.to_a.sort_by {|a,b| b}
+  end
 
-  #= correction_status_label
   #* @param1= val: value of a incident correction status
   #* @returns= the incident correction status label
   def correction_status_label(val)
-	  correction_status_values[val]	  	
+    correction_status_values[val]
   end
-
-
 end

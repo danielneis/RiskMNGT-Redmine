@@ -34,55 +34,47 @@
 #  under the Licence.
 
 module ProjectRiskStatisticsHelper
-	
-	
-	#= status_choices
-	#== create an array of Row class where Row.name is the translated value, Row.value the identifier of the translator item
-	#== which must be the same than item['value'] where item is an item of the array _data_. Row.count is equal to item['count'] when item['value'] is equal to translation key, otherwise 0.
-	#* @param1= data: array of hash element whose element has count and value keys. [{ "value" => 1, "count" => 2 } , { "value" => 2, "count" => 1 }].
-	#* @param2= translator: Array of translation items for each data.item[value]. [ [1,'translation1'],[2,'translation2] ]
-	#* @returns= array of Row with an item for each translator item.
-	def compose_rows(data,translator)
-		
-		result =  Array.new
-		
-		(0..translator.size-1).each { |i|						
-		#translator.each_pair { |key, value|
-			value = translator[i][0]
-			key = translator[i][1]
-			
-			row = Row.new
-			row.name = value
-			row.value= key
-			
-			item = get_item_of_data_whose_value_equal_key(key,  data)
-			
-			row.count = item.nil? ? 0 : item['count']
-									
-			result << row
-			
-		} unless translator.nil?
-				
-		result
-	end
-	
 
-	#= get_item_of_data_whose_value_equal_key
-	#== return the first item from the array _data_ where item['value'] is equal to _key_, otherwise returns nil
-	#* @param1= key: string.
-	#* @param2= data: array of hash element whose element has count and value keys. [{ "value" => 1, "count" => 2 } , { "value" => 2, "count" => 1 }].
-	#* @returns= the first item from the array _data_ where item['value'] is equal to _key_, otherwise returns nil 	
-	private
-	def get_item_of_data_whose_value_equal_key( key,  data)
-		result = nil
-		
-		data.each { |item|
-			result = item if item['value'].to_i == key								
-		}unless data.nil?
-		
-		result	
-	end
-	
-	
+  #Create an array of Row class where Row.name is the translated value, Row.value the identifier of the translator item
+  #which must be the same than item['value'] where item is an item of the array _data_. Row.count is equal to item['count'] when item['value'] is equal to translation key, otherwise 0.
+  #* @param1= data: array of hash element whose element has count and value keys. [{ "value" => 1, "count" => 2 } , { "value" => 2, "count" => 1 }].
+  #* @param2= translator: Array of translation items for each data.item[value]. [ [1,'translation1'],[2,'translation2] ]
+  #* @returns= array of Row with an item for each translator item.
+  def compose_rows(data,translator)
+
+    result =  Array.new
+
+    (0..translator.size-1).each { |i|
+      value = translator[i][0]
+      key = translator[i][1]
+
+      row = Row.new
+      row.name = value
+      row.value= key
+
+      item = get_item_of_data_whose_value_equal_key(key,  data)
+
+      row.count = item.nil? ? 0 : item['count']
+
+      result << row
+
+    } unless translator.nil?
+
+    result
+  end
+
+  #Return the first item from the array _data_ where item['value'] is equal to _key_, otherwise returns nil
+  #* @param1= key: string.
+  #* @param2= data: array of hash element whose element has count and value keys. [{ "value" => 1, "count" => 2 } , { "value" => 2, "count" => 1 }].
+  #* @returns= the first item from the array _data_ where item['value'] is equal to _key_, otherwise returns nil
+  private
+  def get_item_of_data_whose_value_equal_key( key,  data)
+    result = nil
+
+    data.each { |item|
+      result = item if item['value'].to_i == key
+    } unless data.nil?
+
+    result
+  end
 end
-

@@ -34,30 +34,24 @@
 #  under the Licence.
 
 module RisksHelper
-	
-  #= risk_status_values
-  #=== { 0 => "Inactive", 1 => "Active" }
-  #* @returns= hash whose keys are the risk status value and its values are the translated name of the specific category status 	
-  def risk_status_values
-	  h = {}
-	  h[Risk::STATUS_INACTIVE.to_i]=l(:inactive_label)
-	  h[Risk::STATUS_ACTIVE.to_i]=l(:active_label)	   	
-	  h
-  end	
 
-  #= risk_status_choices
-  #* @returns= collection of Risk status labels and its respective values to be used on a html select
-  def risk_status_choices
-	  risk_status_values.invert.to_a.to_a.sort_by {|a,b| a}	
+  #{ 0 => "Inactive", 1 => "Active" }
+  #* @returns= hash whose keys are the risk status value and its values are the translated name of the specific category status
+  def risk_status_values
+    h = {}
+    h[Risk::STATUS_INACTIVE.to_i]=l(:inactive_label)
+    h[Risk::STATUS_ACTIVE.to_i]=l(:active_label)
+    h
   end
 
+  #* @returns= collection of Risk status labels and its respective values to be used on a html select
+  def risk_status_choices
+    risk_status_values.invert.to_a.to_a.sort_by {|a,b| a}
+  end
 
-  #= risk_status_label
   #* @param1= val: value of a risk category status
   #* @returns= the Risk status label
   def risk_status_label(val)
-	  risk_status_values[val]	
+    risk_status_values[val]
   end
-
-
 end

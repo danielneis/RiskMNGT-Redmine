@@ -35,29 +35,23 @@
 
 module RiskCategoriesHelper
 
-  #= category_status_values
-  #=== { 0 => "Inactive", 1 => "Active" }
-  #* @returns= hash whose keys are the category status value and its values are the translated name of the specific category status 	
+  #{ 0 => "Inactive", 1 => "Active" }
+  #* @returns= hash whose keys are the category status value and its values are the translated name of the specific category status
   def category_status_values
-	  h = {}
-	  h[RiskCategory::STATUS_INACTIVE.to_i]=l(:inactive_label)
-	  h[RiskCategory::STATUS_ACTIVE.to_i]=l(:active_label)	   	
-	  h
-  end	
-
-  #= category_status_choices
-  #* @returns= collection of Risk category status labels and its respective values to be used on a html select
-  def category_status_choices
-	  category_status_values.invert.to_a.to_a.sort_by {|a,b| a}	
+    h = {}
+    h[RiskCategory::STATUS_INACTIVE.to_i]=l(:inactive_label)
+    h[RiskCategory::STATUS_ACTIVE.to_i]=l(:active_label)
+    h
   end
 
+  #* @returns= collection of Risk category status labels and its respective values to be used on a html select
+  def category_status_choices
+    category_status_values.invert.to_a.to_a.sort_by {|a,b| a}
+  end
 
-  #= category_status_label
   #* @param1= val: value of a risk category status
   #* @returns= the RiskCategory status label
   def category_status_label(val)
-	  category_status_values[val]	
+    category_status_values[val]
   end
-
-
 end
