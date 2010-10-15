@@ -33,9 +33,7 @@
 #  See the Licence for the specific language governing permissions and limitations
 #  under the Licence.
 
-
-#=ProjectIncident
-#===Represents a incident of a specific project. Its attributes are:
+#Represents a incident of a specific project. Its attributes are:
 #* id: _identifier_
 #* name: _required_
 #* description
@@ -48,52 +46,48 @@
 #* created_on: datetime. _required_
 #* updated_on: datetime. _required_
 class ProjectIncident < ActiveRecord::Base
-	unloadable  # because of http://dev.rubyonrails.org/ticket/8246
-			
-	CORRECTION_STATUS_NONE = 0
-	CORRECTION_STATUS_RESOLVED = 1
-	CORRECTION_STATUS_NOT_RESOLVED = 2
-	CORRECTION_STATUS_IN_PROGRESS = 3
-	
-	
-	belongs_to :project
-	belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'			
-	
-	
-	has_and_belongs_to_many :issues
-	
-								
-	validates_presence_of :project_id , :author_id ,:name , :message => "Missing elements"	
-	validates_numericality_of :correction_status, :greater_than_or_equal_to=> 0, :less_than_or_equal_to=> 3 , :message => "Invalid correction status"	
-	validates_numericality_of :impact, :greater_than_or_equal_to=> 1, :less_than_or_equal_to=> 5 , :message => "Invalid impact"
-	
-	after_create :set_baseline_from_issue
-        after_destroy :remove_baseline_issues
-		
-	#The initialize method is being neatly sidestepped when creating objects from the database
-	def initialize(args = nil)	
-		super
-		self.correction_status =  ProjectIncident::CORRECTION_STATUS_NONE if args.nil? || args[:correction_status].nil?	
-	end
+  unloadable  # because of http://dev.rubyonrails.org/ticket/8246
 
-	def set_baseline_from_issue
-		self.reload
-		if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",self.project_id,"requirement_tool"]) != nil
-			base= get_current_baseline(self.project_id)
-			if base!= nil
-				bi = BaselineIncidents.new
-				bi.incident_id = self.id
-				bi.baseline_id = base.id
-				bi.save
-			end
-		        return true
-		end
-        end
+  CORRECTION_STATUS_NONE = 0
+  CORRECTION_STATUS_RESOLVED = 1
+  CORRECTION_STATUS_NOT_RESOLVED = 2
+  CORRECTION_STATUS_IN_PROGRESS = 3
 
-        def remove_baseline_issues
-		if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",self.project_id,"requirement_tool"]) != nil
-	    	    BaselineIncidents.destroy_all(['incident_id = (?)', self.id]) if self.id
-		end
-        end
-	
+  belongs_to :project
+  belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
+
+  has_and_belongs_to_many :issues
+
+  validates_presence_of :project_id , :author_id ,:name , :message => "Missing elements"
+  validates_numericality_of :correction_status, :greater_than_or_equal_to=> 0, :less_than_or_equal_to=> 3 , :message => "Invalid correction status"
+  validates_numericality_of :impact, :greater_than_or_equal_to=> 1, :less_than_or_equal_to=> 5 , :message => "Invalid impact"
+
+  after_create :set_baseline_from_issue
+  after_destroy :remove_baseline_issues
+
+  #The initialize method is being neatly sidestepped when creating objects from the database
+  def initialize(args = nil)
+    super
+    self.correction_status =  ProjectIncident::CORRECTION_STATUS_NONE if args.nil? || args[:correction_status].nil?
+  end
+
+  def set_baseline_from_issue
+    self.reload
+    if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",self.project_id,"requirement_tool"]) != nil
+      base= get_current_baseline(self.project_id)
+      if base!= nil
+        bi = BaselineIncidents.new
+        bi.incident_id = self.id
+        bi.baseline_id = base.id
+        bi.save
+      end
+      return true
+    end
+  end
+
+  def remove_baseline_issues
+    if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",self.project_id,"requirement_tool"]) != nil
+      BaselineIncidents.destroy_all(['incident_id = (?)', self.id]) if self.id
+    end
+  end
 end

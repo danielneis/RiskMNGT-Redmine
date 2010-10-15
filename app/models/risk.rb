@@ -33,8 +33,7 @@
 #  See the Licence for the specific language governing permissions and limitations
 #  under the Licence.
 
-#=Risk
-#===Represents a system risk. Its attributes are:
+#Represents a system risk. Its attributes are:
 #* id: _identifier_
 #* name: _required_
 #* description
@@ -42,20 +41,18 @@
 #* mitigation: mitigation plan of the specific risk
 #* status: contingency plan of the specific risk
 #* risk_category_id: identifier of the associated risk_category. _required_
-class Risk < ActiveRecord::Base	
-	STATUS_INACTIVE=0
-	STATUS_ACTIVE=1
-				 	
-	belongs_to :risk_category
-			
-	validates_presence_of :risk_category_id, :name, :message => "Missing elements"		
-	validates_numericality_of :status, :greater_than_or_equal_to=> 0, :less_than_or_equal_to=> 2 , :message => "Invalid status"
-	#validates_associated :risk_category, :message => "Error on risk category" --->Don’t use validates_associated on both ends of your associations, they would call each other in an infinite loop.
-	
-	
-	#The initialize method is being neatly sidestepped when creating objects from the database
-	def initialize(args = nil)	
-		super
-		self.status =  Risk::STATUS_ACTIVE if args.nil? || args[:status].nil?
-	end
+class Risk < ActiveRecord::Base
+  STATUS_INACTIVE=0
+  STATUS_ACTIVE=1
+
+  belongs_to :risk_category
+
+  validates_presence_of :risk_category_id, :name, :message => "Missing elements"
+  validates_numericality_of :status, :greater_than_or_equal_to=> 0, :less_than_or_equal_to=> 2 , :message => "Invalid status"
+
+  #The initialize method is being neatly sidestepped when creating objects from the database
+  def initialize(args = nil)
+    super
+    self.status =  Risk::STATUS_ACTIVE if args.nil? || args[:status].nil?
+  end
 end

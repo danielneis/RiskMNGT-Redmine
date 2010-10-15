@@ -33,10 +33,7 @@
 #  See the Licence for the specific language governing permissions and limitations
 #  under the Licence.
 
-
-
-#=ProjectRisk
-#===Represents a risk of a specific project. Its attributes are:
+#Represents a risk of a specific project. Its attributes are:
 #* id: _identifier_
 #* name: _required_
 #* description
@@ -52,60 +49,55 @@
 #* created_on: datetime. _required_
 #* updated_on: datetime. _required_
 class ProjectRisk < ActiveRecord::Base
-	unloadable  # because of http://dev.rubyonrails.org/ticket/8246
-			
-	MITIGATION_STATUS_NONE = 0
-	MITIGATION_STATUS_OPEN = 1
-	MITIGATION_STATUS_IN_PROGRESS = 2
-	MITIGATION_STATUS_CLOSED = 3
-	
-	
+  unloadable  # because of http://dev.rubyonrails.org/ticket/8246
 
-	belongs_to :project
-	belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'		
-	belongs_to :risk_category
-	belongs_to :risk	
-	
-	
-	has_and_belongs_to_many :issues
-	
-								
-	validates_presence_of :project_id , :risk_category_id, :author_id ,:name , :message => "Missing elements"	
-	validates_numericality_of :mitigation_status, :greater_than_or_equal_to=> 0, :less_than_or_equal_to=> 3 , :message => "Invalid mitigation status"
-	validates_numericality_of :probability, :greater_than_or_equal_to=> 1, :less_than_or_equal_to=> 5 , :message => "Invalid probability"
-	validates_numericality_of :impact, :greater_than_or_equal_to=> 1, :less_than_or_equal_to=> 5 , :message => "Invalid impact"
-	
-	after_create :set_baseline_from_issue
-        after_destroy :remove_baseline_issues
+  MITIGATION_STATUS_NONE = 0
+  MITIGATION_STATUS_OPEN = 1
+  MITIGATION_STATUS_IN_PROGRESS = 2
+  MITIGATION_STATUS_CLOSED = 3
 
-		
-	#The initialize method is being neatly sidestepped when creating objects from the database
-	def initialize(args = nil)	
-		super
-		self.mitigation_status =  ProjectRisk::MITIGATION_STATUS_NONE if args.nil? || args[:mitigation_status].nil?	
-	end
-	
-	def exposure
-		self.probability + self.impact	
-	end
+  belongs_to :project
+  belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
+  belongs_to :risk_category
+  belongs_to :risk
 
-	def set_baseline_from_issue
-		self.reload
-		if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",self.project_id,"requirement_tool"]) != nil
-			base= get_current_baseline(self.project_id)
-			if base!= nil
-				bi = BaselineRisks.new
-				bi.risk_id = self.id
-				bi.baseline_id = base.id
-				bi.save
-			end
-		        return true
-		end
-        end
+  has_and_belongs_to_many :issues
 
-        def remove_baseline_issues
-		if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",self.project_id,"requirement_tool"]) != nil
-	    	    BaselineRisks.destroy_all(['risk_id = (?)', self.id]) if self.id
-		end
-        end
+  validates_presence_of :project_id , :risk_category_id, :author_id ,:name , :message => "Missing elements"
+  validates_numericality_of :mitigation_status, :greater_than_or_equal_to=> 0, :less_than_or_equal_to=> 3 , :message => "Invalid mitigation status"
+  validates_numericality_of :probability, :greater_than_or_equal_to=> 1, :less_than_or_equal_to=> 5 , :message => "Invalid probability"
+  validates_numericality_of :impact, :greater_than_or_equal_to=> 1, :less_than_or_equal_to=> 5 , :message => "Invalid impact"
+
+  after_create :set_baseline_from_issue
+  after_destroy :remove_baseline_issues
+
+  #The initialize method is being neatly sidestepped when creating objects from the database
+  def initialize(args = nil)
+    super
+    self.mitigation_status =  ProjectRisk::MITIGATION_STATUS_NONE if args.nil? || args[:mitigation_status].nil?
+  end
+
+  def exposure
+    self.probability + self.impact
+  end
+
+  def set_baseline_from_issue
+    self.reload
+    if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",self.project_id,"requirement_tool"]) != nil
+      base= get_current_baseline(self.project_id)
+      if base!= nil
+        bi = BaselineRisks.new
+        bi.risk_id = self.id
+        bi.baseline_id = base.id
+        bi.save
+      end
+      return true
+    end
+  end
+
+  def remove_baseline_issues
+    if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",self.project_id,"requirement_tool"]) != nil
+      BaselineRisks.destroy_all(['risk_id = (?)', self.id]) if self.id
+    end
+  end
 end

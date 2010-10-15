@@ -33,28 +33,25 @@
 #  See the Licence for the specific language governing permissions and limitations
 #  under the Licence.
 
-#=RiskCategory
-#===Represents a system category risk. Its attributes are:
+#Represents a system category risk. Its attributes are:
 #* id: _identifier_
 #* name: _required_
 #* description
 #* status: {STATUS_INACTIVE=0, STATUS_ACTIVE=1}
 class RiskCategory < ActiveRecord::Base
-		
-	STATUS_INACTIVE  = 0
-	STATUS_ACTIVE     = 1
-		
-	
-	has_many :risks, :dependent => :destroy
-			
-	validates_presence_of :name , :message => "Name must be present"
-	validates_numericality_of :status, :greater_than_or_equal_to=> 0, :less_than_or_equal_to=> 2 , :message => "Invalid status"	
-	validates_associated :risks , :message => "Risk/s are not valid"	
-	
-	#The initialize method is being neatly sidestepped when creating objects from the database
-	def initialize(args = nil)	
-		super				
-		self.status =  RiskCategory::STATUS_ACTIVE if args.nil? || args[:status].nil?			
-	end
 
+  STATUS_INACTIVE  = 0
+  STATUS_ACTIVE     = 1
+
+  has_many :risks, :dependent => :destroy
+
+  validates_presence_of :name , :message => "Name must be present"
+  validates_numericality_of :status, :greater_than_or_equal_to=> 0, :less_than_or_equal_to=> 2 , :message => "Invalid status"
+  validates_associated :risks , :message => "Risk/s are not valid"
+
+  #The initialize method is being neatly sidestepped when creating objects from the database
+  def initialize(args = nil)
+    super
+    self.status =  RiskCategory::STATUS_ACTIVE if args.nil? || args[:status].nil?
+  end
 end

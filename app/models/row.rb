@@ -33,12 +33,10 @@
 #  See the Licence for the specific language governing permissions and limitations
 #  under the Licence.
 
-#=Row
-#===Class to be used on reports. No active record class.
+#Class to be used on reports. No active record class.
 #* name: translation name
 #* value: represent the key which identifies the element.
 #* count: represent the number of elements.
 class Row
-	attr_accessor :name, :value, :count
-  	
+  attr_accessor :name, :value, :count
 end
