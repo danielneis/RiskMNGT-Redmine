@@ -86,10 +86,6 @@ class ProjectRisksController < BaseRiskApplicationController
     edit( l(:notice_successful_create)  )
   end
 
-  #Shows the view of a specific project risk
-  def show
-  end
-
   #Deletes a project risk
   def delete
     if @project_risk.destroy

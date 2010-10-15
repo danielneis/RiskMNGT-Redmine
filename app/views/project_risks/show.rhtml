@@ -5,88 +5,98 @@
 
 <%= render :partial => 'project_risk_section/header', :locals => { :tab=>'project_risks' ,  :project_id=> @project } %>
 
-<% unless @project_risk.nil? %>
+<%= render :partial => 'action_menu' %>
 
-<h2><%=l(:risk_label)%> #<%= @project_risk.id %></h2>
+<h2><%= l(:risk_label) %> #<%= @project_risk.id %></h2>
 
-<table>
-  <th>
-    <td align="right">
-    <%= link_to l(:button_edit), {:action => 'update', :id => @project_risk.id , :project_id => @project }, :class => 'icon icon-edit' %>
-    </td>
-  </th>
-</table>
-<div class="issue">
+<div class="issue details">
 
-<h3><%=h @project_risk.name %></h3>
+  <div class="subject">
+    <h3><%=h @project_risk.name %></h3>
+  </div>
 
-<div id="risk-div">
-  <p><%= authoring @project_risk.created_on, @project_risk.author %></p>
+  <p class="autor"><%= authoring @project_risk.created_on, @project_risk.author %></p>
 
-  <table>
+  <table class="attributes">
     <tr>
-      <td><%=l(:field_impact)%>:</td>
-      <td><%= level_label @project_risk.impact %></td>
-      <td><%=l(:field_probability)%>:</td>
-      <td><%= level_label @project_risk.probability %></td>
+      <th><%=l(:field_impact)%>:</th><td><%= level_label @project_risk.impact %></td>
+      <th><%=l(:field_probability)%>:</th><td><%= level_label @project_risk.probability %></td>
     </tr>
     <tr>
-      <td><%= l(:field_risk_category)%>:</td>
-      <td><%= link_to h(@project_risk.risk_category.name), {  :controller => 'risk_categories' ,  :action => 'show', :id =>  @project_risk.risk_category } unless @project_risk.risk_category.nil? %></td>
-      <td><%= l(:field_risk)%>:</td>
-      <td><%= link_to h(@project_risk.risk.name), {  :controller => 'risks' ,  :action => 'show', :id =>  @project_risk.risk } unless @project_risk.risk.nil? %></td>
+      <th><%= l(:field_risk_category)%>:</th>
+      <td>
+        <% unless @project_risk.risk_category.nil? %>
+        <%=  link_to h(@project_risk.risk_category.name), {:controller => 'risk_categories', :action => 'show', :id => @project_risk.risk_category} %>
+        <%  end %>
+      </td>
+      <th><%= l(:field_risk)%>:</th>
+      <td>
+        <% unless @project_risk.risk.nil? %>
+        <%= link_to h(@project_risk.risk.name), {:controller => 'risks', :action => 'show', :id =>  @project_risk.risk} %>
+        <% end %>
+       </td>
     </tr>
     <tr>
-      <td><%= l(:field_detection_datetime)%>:</td>
-      <td><%= format_date(@project_risk.detection_datetime) %></td>
-      <td><%= l(:field_closed_datetime)%>:</td>
-      <td><%= format_date(@project_risk.closed_datetime) %></td>
+      <th><%= l(:field_detection_datetime)%>:</th><td><%= format_date(@project_risk.detection_datetime) %></td>
+      <th><%= l(:field_closed_datetime)%>:</th><td><%= format_date(@project_risk.closed_datetime) %></td>
     </tr>
   </table>
 
-  <table>
-   <tr>
-      <td><%= l(:field_description)%>:</td>
-      <td><%= h(@project_risk.description) %></td>
-   </tr>
+  <p><strong><%=l(:field_description)%></strong></p>
+  <div class="wiki">
+    <%= textilizable @project_risk, :description %>
+  </div>
+
+
+</div>
+
+<div class="issue details">
+
+  <h3><%=l(:field_mitigation)%></h3>
+
+  <table class="attributes">
+    <tr>
+      <th><%=l(:field_status)%>:</th><td><%= status_label @project_risk.mitigation_status %></td>
+      <th><%=l(:field_resolution_datetime)%>:</th><td><%= format_date @project_risk.resolution_datetime %></td>
+    </tr>
   </table>
+
+  <p><strong><%=l(:field_description)%></strong></p>
+  <div class="wiki">
+    <%= textilizable(@project_risk.mitigation) %></p>
+  </div>
 </div>
 
-<div id="mitigation-div">
- <p><%= l(:field_mitigation_status) %>:<%= status_label @project_risk.mitigation_status %></p>
- <p><%= l(:field_resolution_datetime) %>: <%= format_date(@project_risk.resolution_datetime) %></p>
- <p><%= l(:field_mitigation) %>: <%= textilizable(@project_risk.mitigation) %></p>
+<div class="issue details">
+  <h3><%=l(:field_contingency)%></h3>
+  <p><strong><%=l(:field_description)%></strong></p>
+  <div class="wiki">
+    <%= textilizable(@project_risk.contingency) %></p>
+  </div>
 </div>
 
-<div id="contingency-div">
-  <p><%= l(:field_contingency) %>: <%= textilizable(@project_risk.contingency) %></p>
-</div>
-
-<div id="issues-div">
-
-  <% if @project_risk.issues.any? %>
-
-  <table class="list">
-    <thead>
-      <th><%= l(:field_name) %></th>
-      <th><%= l(:field_subject) %></th>
-      <th><%= l(:field_status) %></th>
-      <th><%= l(:field_start_date) %></th>
-      <th><%= l(:field_due_date) %></th>
-    </thead>
-    <tbody>
-    <% @project_risk.issues.each do |issue| %>
-      <tr class="<%= cycle 'odd', 'even' %>">
-      <td><%= h(issue.project) + ' - ' if Setting.cross_project_issue_relations? %> <%= link_to_issue issue %></td>
-      <td><%=issue.subject %></td>
-      <td><%= issue.status.name %></td>
-      <td><%= format_date(issue.start_date) %></td>
-      <td><%= format_date(issue.due_date) %></td>
-      </tr>
-    </tbody>
-    <% end %>
-  </table>
- <% end %>
-</div>
-</div>
+<% if @project_risk.issues.any? %>
+<h3><%=l(:label_related_issues)%></h3>
+  <div id="issues-div">
+    <table class="list">
+      <thead>
+        <th><%= l(:field_name) %></th>
+        <th><%= l(:field_subject) %></th>
+        <th><%= l(:field_status) %></th>
+        <th><%= l(:field_start_date) %></th>
+        <th><%= l(:field_due_date) %></th>
+      </thead>
+      <tbody>
+      <% @project_risk.issues.each do |issue| %>
+        <tr class="<%= cycle 'odd', 'even' %>">
+          <td><%= h(issue.project) + ' - ' if Setting.cross_project_issue_relations? %> <%= link_to_issue issue %></td>
+          <td><%=issue.subject %></td>
+          <td><%= issue.status.name %></td>
+          <td><%= format_date(issue.start_date) %></td>
+          <td><%= format_date(issue.due_date) %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
 <% end %>
