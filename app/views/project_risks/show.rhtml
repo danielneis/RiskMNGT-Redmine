@@ -13,7 +13,7 @@
     <h3><%=h @project_risk.name %></h3>
   </div>
 
-  <p class="autor"><%= authoring @project_risk.created_on, @project_risk.author %></p>
+  <p class="author"><%= authoring @project_risk.created_on, @project_risk.author %></p>
 
   <table class="attributes">
     <tr>
@@ -44,8 +44,6 @@
   <div class="wiki">
     <%= textilizable @project_risk, :description %>
   </div>
-
-
 </div>
 
 <div class="issue details">

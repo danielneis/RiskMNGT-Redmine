@@ -38,10 +38,10 @@ class ProjectIncidentsController < BaseRiskApplicationController
   menu_item :risks
 
   before_filter :find_project , :except => [:preview]
-  before_filter :find_project_incident , :only => [:update, :delete, :show, :issues_new, :issues_index, :issues_delete]
+  before_filter :find_project_incident , :only => [:update, :destroy, :show, :issues_new, :issues_index, :issues_delete]
   before_filter :require_login
   before_filter :authorize, :except => [:preview]
-  verify :method => :post, :only => [:delete]
+  verify :method => :post, :only => [:destroy]
 
   helper :project_risks
   include ProjectRisksHelper
@@ -51,7 +51,6 @@ class ProjectIncidentsController < BaseRiskApplicationController
 
     @incident_correction_status = ( params[:incident] && has_value_params( params[:incident][:correction_status] ) ? params[:incident][:correction_status] : nil )
     @incident_impact = ( params[:incident] && has_value_params( params[:incident][:impact] ) ? params[:incident][:impact] : nil )
-
 
     conditionStm = project_incident_query_condition
     limit = per_page_option
@@ -72,14 +71,11 @@ class ProjectIncidentsController < BaseRiskApplicationController
     edit( @incident ,  params[:incident] , l(:notice_successful_create) , @project )
   end
 
-  #Shows the view of a specific project risk
-  def show 
-  end
-
-  #Deletes a project incident
-  def delete
+  def destroy
     if @incident.destroy
       flash[:notice] = l(:notice_successful_delete)
+    else
+      flash[:notice] = l(:notice_unsuccessful_delete)
     end
     redirect_to :action => 'index', :project_id => @project
   end

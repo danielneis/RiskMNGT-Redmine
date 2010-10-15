@@ -38,10 +38,10 @@ class ProjectRisksController < BaseRiskApplicationController
   menu_item :risks
 
   before_filter :find_project , :except => [:preview, :update_selectable_risks]
-  before_filter :find_project_risk , :only => [:update, :delete, :show, :issues_new, :issues_index, :issues_delete]
+  before_filter :find_project_risk , :only => [:update, :destroy, :show, :issues_new, :issues_index, :issues_delete]
   before_filter :require_login
   before_filter :authorize, :except => [:preview , :update_selectable_risks]
-  verify :method => :post, :only => [:delete]
+  verify :method => :post, :only => [:destroy]
 
   helper :sort
   include SortHelper
@@ -87,12 +87,13 @@ class ProjectRisksController < BaseRiskApplicationController
   end
 
   #Deletes a project risk
-  def delete
+  def destroy 
     if @project_risk.destroy
       flash[:notice] = l(:notice_successful_delete)
+    else
+      flash[:notice] = l(:notice_unsuccessful_delete)
     end
-
-   redirect_to :action => 'index', :project_id => @project
+    redirect_to :action => 'index', :project_id => @project
   end
 
   #If the request is a post and has the project risk parameters,

@@ -23,8 +23,6 @@
         <th align="left"><%= l(:field_correction_status) %></th>
         <th align="left"><%= l(:field_impact) %></th>
         <th align="left"><%= l(:label_issue_plural) %> *</th>
-        <th></th>
-        <th></th>
       </thead>
       <tbody>
      <%
@@ -40,8 +38,6 @@
             <td><%= correction_status_label incident.correction_status.to_i %></td>
             <td><%=h(incident.impact) %></td>
             <td> <%= link_to incident.issues.size, { :action => 'issues_index', :id => incident,  :project_id=> @project } %></td>
-            <td align="center"><%= link_to l(:button_edit), {  :action => 'update', :id => incident , :project_id => @project }, :class => 'icon icon-edit' %></td>
-            <td align="center"><%= link_to l(:button_delete), {:action => 'delete', :id => incident , :project_id => @project }, :method => :post, :class => 'icon icon-del', :confirm => l(:will_be_deleted_label, incident.name) %></td>
           </tr>
       <% end
       end %>

@@ -37,8 +37,6 @@
         <th align="left"><%= l(:field_impact) %></th>
         <th align="left"><%= l(:field_exposure) %></th>
         <th align="left"><%= l(:label_issue_plural) %> *</th>
-        <th></th>
-        <th></th>
        </thead>
        <tbody>
        <%
@@ -57,8 +55,6 @@
               <td><%=h(risk.impact) %></td>
               <td><%=h(risk.exposure) %></td>
               <td><%= link_to risk.issues.size, { :action => 'issues_index', :id => risk,  :project_id=> @project } %></td>
-              <td align="center"><%= link_to l(:button_edit), {  :action => 'update', :id => risk , :project_id => @project }, :class => 'icon icon-edit' %></td>
-              <td align="center"><%= link_to l(:button_delete), {:action => 'delete', :id => risk , :project_id => @project }, :method => :post, :class => 'icon icon-del', :confirm => l(:will_be_deleted_label, risk.name) %></td>
             </tr>
        <% end
        end %>
