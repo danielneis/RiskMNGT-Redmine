@@ -35,7 +35,7 @@
 
 #Manages the system risks
 class RisksController < BaseRiskApplicationController
-  unloadable
+  menu_item :risks
 
   before_filter :require_login
   before_filter :authorize_global, :except => [:preview, :show]

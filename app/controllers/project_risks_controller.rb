@@ -35,7 +35,7 @@
 
 #Manages the risks of a specific project
 class ProjectRisksController < BaseRiskApplicationController
-  unloadable
+  menu_item :risks
 
   before_filter :find_project , :except => [:preview, :update_selectable_risks]
   before_filter :find_project_risk , :only => [:update, :delete, :show, :issues_new, :issues_index, :issues_delete]

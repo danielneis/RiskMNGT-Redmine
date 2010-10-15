@@ -35,7 +35,7 @@
 
 #Manages the project risk statistics of a specific project
 class ProjectRiskStatisticsController < BaseRiskApplicationController
-  unloadable
+  menu_item :risks
 
   before_filter :find_project
   before_filter :require_login

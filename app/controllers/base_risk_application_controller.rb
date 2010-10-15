@@ -35,7 +35,6 @@
 
 #This class represents the super class of all the controllers on the risk plugin
 class BaseRiskApplicationController < ApplicationController
-  unloadable
 
   #Authorize to access controllers which don't depends on a specific project
   #* @param1= ctrl: default params[:controller]

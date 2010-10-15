@@ -35,7 +35,6 @@
 
 #Manages the system risk categories
 class RiskCategoriesController < BaseRiskApplicationController
-  unloadable
 
   before_filter :require_login
   before_filter :authorize_global , :except => [:show]

@@ -35,7 +35,7 @@
 
 #Manages the list of well-known risks to be shown on the project risk section.
 class RiskListController < BaseRiskApplicationController
-  unloadable
+  menu_item :risks
 
   before_filter :find_project
   before_filter :require_login

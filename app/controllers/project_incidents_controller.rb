@@ -35,7 +35,7 @@
 
 #Manages the incidents of a specific project
 class ProjectIncidentsController < BaseRiskApplicationController
-  unloadable
+  menu_item :risks
 
   before_filter :find_project , :except => [:preview]
   before_filter :find_project_incident , :only => [:update, :delete, :show, :issues_new, :issues_index, :issues_delete]
