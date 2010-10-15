@@ -1,4 +1,4 @@
-= risks
+= Redmine Risks =
 
-Isotrol RiskMNGT Redmine Plugin 1.0. 
-
+Redmine plugin for risks and incidents management.
+Started by Isotrol and fostered by Daniel Neis Araujo.
