@@ -33,112 +33,86 @@
 #  See the Licence for the specific language governing permissions and limitations
 #  under the Licence.
 
-#=RisksController
-#===It manages the system risks
+#Manages the system risks
 class RisksController < BaseRiskApplicationController
-	unloadable		
-	
-	before_filter :require_login
-	before_filter :authorize_global, :except => [:preview, :retrieve]
-	before_filter :find_risks, :only => [:update, :delete, :retrieve]
-	verify :method => :post, :only => [:delete]
-	
-  #=index
-  #===It shows a paginated list of risks which can be filtered via risk status and risk category	
+  unloadable
+
+  before_filter :require_login
+  before_filter :authorize_global, :except => [:preview, :retrieve]
+  before_filter :find_risks, :only => [:update, :delete, :retrieve]
+  verify :method => :post, :only => [:delete]
+
+  #It shows a paginated list of risks which can be filtered via risk status and risk category
   def index
-	
-	  @risk_status = ( params[:risk] ? params[:risk][:status] : nil )
-	  @risk_category_id = ( params[:risk] ? params[:risk][:risk_category_id] : nil )
-	
-	  @select_categories = RiskCategory.find :all
-	
-	  risks_search
-			   			
- 	  # Template rendering works just like action rendering except that it takes a path relative to the template root. The current layout is automatically applied. 				
-	  render :template => 'risks/index.rhtml', :layout => !request.xhr?	  	 	  	  	  	
+
+    @risk_status = ( params[:risk] ? params[:risk][:status] : nil )
+    @risk_category_id = ( params[:risk] ? params[:risk][:risk_category_id] : nil )
+
+    @select_categories = RiskCategory.find :all
+
+    risks_search
+
+     # Template rendering works just like action rendering except that it takes a path relative to the template root. The current layout is automatically applied.
+    render :template => 'risks/index.rhtml', :layout => !request.xhr?
   end
 
-
-
-  #=create
-  #===If the request is a post and has the risk parameters (params[:risk][:name]....), it updates the new risk and when is successfully saved, redirects to index
-  #===Otherwise it redirects to the risk creation view.	
-  def create		  	
-	  @risk = Risk.new
-	  edit( l(:notice_successful_create) )	 	  	
+  #If the request is a post and has the risk parameters (params[:risk][:name]....), it updates the new risk and when is successfully saved, redirects to index
+  #Otherwise it redirects to the risk creation view.
+  def create
+    @risk = Risk.new
+    edit( l(:notice_successful_create) )
   end
 
-  #=retrieve
-  #=== It executes _find_risks_ and shows the view of the specific risk
+  #It executes _find_risks_ and shows the view of the specific risk
   def retrieve
-	  	  	
   end
 
-  #=update
-  #===If the request is a post and has the risk parameters (params[:risk][:name]....), it updates the risk and if it is successfully saved, redirects to index
-  #===Otherwise it redirects to the risk update view.
-  def update		    	  	
-	  edit( l(:notice_successful_update) )	
+  #If the request is a post and has the risk parameters (params[:risk][:name]....), it updates the risk and if it is successfully saved, redirects to index
+  #Otherwise it redirects to the risk update view.
+  def update
+    edit( l(:notice_successful_update) )
   end
 
-  #=delete
-  #===It destroys the risk specified on param[:id] when the risk has no associated project risks.     	
+  #Destroys the risk specified on param[:id] when the risk has no associated project risks.
   def delete
-	  	  	
-	  p_risks = ProjectRisk.find :all,
-	  			     :conditions=>['risk_id=?', @risk.id]
-		
-	  if !p_risks.nil? && p_risks.size > 0
-		  flash[:error] = l(:not_allowed_to_delete_risk_with_associated_project_risks_label)	
-	  elsif @risk.destroy
-		  flash[:notice] = l(:notice_successful_delete)	  	  							
-	  end		
-	
-	 redirect_to :action => 'index'
+
+    p_risks = ProjectRisk.find :all,
+               :conditions=>['risk_id=?', @risk.id]
+
+    if !p_risks.nil? && p_risks.size > 0
+      flash[:error] = l(:not_allowed_to_delete_risk_with_associated_project_risks_label)
+    elsif @risk.destroy
+      flash[:notice] = l(:notice_successful_delete)
+    end
+
+   redirect_to :action => 'index'
   end
 
-
-  #=preview
-  #=== It renders to "common/preview" either params[:risk][:mitigation] when params[:opt] == 'mitigation' or params[:risk][:contingency] when params[:opt] == 'contingency'
-  #==== It is intended to be used on Ajax request to preview a specific text area
-  def preview	  	  		
-	  if params[:opt] && params[:risk]
-		
-		if params[:opt] == 'mitigation'
-			@text =  params[:risk][:mitigation]	
-		elsif params[:opt] == 'contingency'
-			@text =  params[:risk][:contingency]					
-		end
-		
-	  end		
-	
-	  render :partial => 'common/preview'	
+  #It renders to "common/preview" either params[:risk][:mitigation] when params[:opt] == 'mitigation' or params[:risk][:contingency] when params[:opt] == 'contingency'
+  #It is intended to be used on Ajax request to preview a specific text area
+  def preview
+    if params[:opt] && params[:risk]
+      if params[:opt] == 'mitigation'
+        @text =  params[:risk][:mitigation]
+      elsif params[:opt] == 'contingency'
+        @text =  params[:risk][:contingency]
+      end
+    end
+    render :partial => 'common/preview'
   end
 
-
-  #------------------------- private
-
-
-  #==edit
-  #=== If the request is a post and has the risk parameters (params[:risk][:name]....), it sets the properties of the _risk_ variable depending on the risk parametes and saves the item
-  #=== When the item is sucessfully saved, it redirects to index
+  #If the request is a post and has the risk parameters (params[:risk][:name]....), it sets the properties of the _risk_ variable depending on the risk parametes and saves the item
+  #When the item is sucessfully saved, it redirects to index
   private
   def edit( notice_successful )
-	  super( @risk ,  params[:risk] , notice_successful )
-	
-	  @select_categories = RiskCategory.find :all
+    super(@risk ,  params[:risk] , notice_successful)
+    @select_categories = RiskCategory.find :all
   end
 
-
-
-  #==find_risks
-  #===Set the _risk_ variable depending on the _id_ parameter
-  #===It renders to _render_404 when the _risk_ cannot be found
+  #Set the _risk_ variable depending on the _id_ parameter
+  #It renders to _render_404 when the _risk_ cannot be found
   def find_risks
-	  @risk = Risk.find(params[:id])	
-  	  rescue ActiveRecord::RecordNotFound
-	  	  render_404	
+    @risk = Risk.find(params[:id])
+    rescue ActiveRecord::RecordNotFound render_404
   end
-
-
 end

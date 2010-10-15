@@ -33,76 +33,57 @@
 #  See the Licence for the specific language governing permissions and limitations
 #  under the Licence.
 
-#=RisksController
-#===It manages the system risk categories
+#Manages the system risk categories
 class RiskCategoriesController < BaseRiskApplicationController
-	unloadable		
-	
-	before_filter :require_login
-	before_filter :authorize_global , :except => [:retrieve]	
-	before_filter :find_risk_category, :only => [:update, :delete, :retrieve]
-	verify  :method => :post,
-		:only => :delete
-		
-	
+  unloadable
 
-  #=index
-  #===It shows the list of risk categories
+  before_filter :require_login
+  before_filter :authorize_global , :except => [:retrieve]
+  before_filter :find_risk_category, :only => [:update, :delete, :retrieve]
+  verify  :method => :post, :only => :delete
+
+  #Shows the list of risk categories
   def index
-	  @categories = RiskCategory.find :all	  	
+    @categories = RiskCategory.find :all
   end
 
-  #=create
-  #===If the request is a post and has the risk category parameters (params[:category][:name]....), it updates the new risk and when it is successfully saved, redirects to index
-  #===Otherwise it redirects to the risk category creation view.	
-  def create	  	  	   	
-	  @category = RiskCategory.new(:status => RiskCategory::STATUS_ACTIVE)	  	  	
-	  edit( @category ,  params[:category] , l(:notice_successful_create) )
+  #If the request is a post and has the risk category parameters (params[:category][:name]....), it updates the new risk and when it is successfully saved, redirects to index
+  #Otherwise it redirects to the risk category creation view.
+  def create
+    @category = RiskCategory.new(:status => RiskCategory::STATUS_ACTIVE)
+    edit( @category ,  params[:category] , l(:notice_successful_create) )
   end
 
-  #=retrieve
-  #=== It executes _find_risk_category_ and shows the view of the specific risk category
+  #It executes _find_risk_category_ and shows the view of the specific risk category
   def retrieve
-	  	  	
   end
 
-  #=update
-  #===If the request is a post and has the risk category parameters (params[:category][:name]....), it updates the category and if it is successfully saved, redirects to index
-  #===Otherwise it redirects to the risk category update view.
-  def update		    	  	
-	  edit( @category ,  params[:category] , l(:notice_successful_update) )
+  #If the request is a post and has the risk category parameters (params[:category][:name]....), it updates the category and if it is successfully saved, redirects to index
+  #Otherwise it redirects to the risk category update view.
+  def update
+    edit( @category ,  params[:category] , l(:notice_successful_update) )
   end
 
-	
-  #=delete
-  #===It destroys the risk specified on param[:id] when the category has no associated project risks or associated well-known risks.
-  def delete	  	
-	
-	  p_risks = ProjectRisk.find :all,
-	  			     :conditions=>['risk_category_id=?', @category.id]
-	  		
-	  if !p_risks.nil? && p_risks.size > 0
-		  flash[:error] = l(:not_allowed_to_delete_category_with_associated_project_risks_label)		  	 	
-	  elsif @category.risks.count > 0		
-		  flash[:error] = l(:not_allowed_to_delete_category_with_associated_risks_label)
-	  elsif @category.destroy
-		  flash[:notice] = l(:notice_successful_delete) 		
-	  end	
-	
-	 redirect_to :action => 'index'
+  #Destroys the risk specified on param[:id] when the category has no associated project risks or associated well-known risks.
+  def delete
+
+    p_risks = ProjectRisk.find :all, :conditions=>['risk_category_id=?', @category.id]
+
+    if !p_risks.nil? && p_risks.size > 0
+      flash[:error] = l(:not_allowed_to_delete_category_with_associated_project_risks_label)
+    elsif @category.risks.count > 0
+      flash[:error] = l(:not_allowed_to_delete_category_with_associated_risks_label)
+    elsif @category.destroy
+      flash[:notice] = l(:notice_successful_delete)
+    end
+
+   redirect_to :action => 'index'
   end
 
-
-  #------------------------------- private
-
-  #==find_risk_category
-  #===Set the _category_ variable depending on the _id_ parameter
-  #===It renders to _render_404 when the _category_ cannot be found
+  #Set the _category_ variable depending on the _id_ parameter
+  #It renders to _render_404 when the _category_ cannot be found
   def find_risk_category
-	  @category = RiskCategory.find(params[:id])
-  	  rescue ActiveRecord::RecordNotFound
-	  	  render_404	
+    @category = RiskCategory.find(params[:id])
+    rescue ActiveRecord::RecordNotFound render_404
   end
-
-
 end

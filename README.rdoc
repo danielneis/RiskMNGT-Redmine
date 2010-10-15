@@ -1,4 +1,20 @@
-= Redmine Risks =
+= Redmine Risks
 
 Redmine plugin for risks and incidents management.
+
 Started by Isotrol and fostered by Daniel Neis Araujo.
+
+= How to use
+
+# Deploy to redmine/vendores/redmine_risks
+# Run db:migrate_plugins
+# Access the "Risks" link in the top menu
+# Create your categories first, because at this moment they are mandatory to create risks
+# You can create "well known risks", that can be referenced in the project risks
+# Access you project, enable the "Risks" module
+# Manage your risks in the "Risks" project menu tab
+
+= Roadmap
+
+* Replace "Preview mitigation" and "Preview contingency" with just one preview for the whole risk
+* Made categories not mandatory when creating risks

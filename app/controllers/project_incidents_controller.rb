@@ -33,140 +33,102 @@
 #  See the Licence for the specific language governing permissions and limitations
 #  under the Licence.
 
-#=ProjectIncidentsController
-#===It manages the incidents of a specific project
+#Manages the incidents of a specific project
 class ProjectIncidentsController < BaseRiskApplicationController
-	unloadable
-		
-	before_filter :find_project , :except => [:preview]
-	before_filter :find_project_incident ,
-		      :only => [:update, :delete, :retrieve, :issues_new, :issues_index, :issues_delete]	
-	before_filter :require_login
-	before_filter :authorize, :except => [:preview]
-	verify :method => :post, :only => [:delete]
-	
-	helper :project_risks
-	include ProjectRisksHelper			
-	
-  #=index
-  #===It shows a paginated list of project incidents which can be filtered via ....
-  def index	  	
-	
-	  @incident_correction_status = ( params[:incident] && has_value_params( params[:incident][:correction_status] ) ? params[:incident][:correction_status] : nil )	
-	  @incident_impact = ( params[:incident] && has_value_params( params[:incident][:impact] ) ? params[:incident][:impact] : nil )
-	
-	
-	  conditionStm = project_incident_query_condition
-	  limit = per_page_option 	  	
-	
-	  @incident_count = ProjectIncident.count(:conditions => conditionStm)
-	  @incident_pages = Paginator.new self, @incident_count, limit, params['page']	  	  	
-	  @incidents = ProjectIncident.find :all,
-	  	           #:order => sort_clause, it could be added, but complex	
-			   :conditions => conditionStm ,
-                           :limit  =>  limit,
-                           :offset =>  @incident_pages.current.offset
-	  			   			    	   				
-	  render :template => 'project_incidents/index.rhtml', :layout => !request.xhr?	   		
+  unloadable
+
+  before_filter :find_project , :except => [:preview]
+  before_filter :find_project_incident , :only => [:update, :delete, :retrieve, :issues_new, :issues_index, :issues_delete]
+  before_filter :require_login
+  before_filter :authorize, :except => [:preview]
+  verify :method => :post, :only => [:delete]
+
+  helper :project_risks
+  include ProjectRisksHelper
+
+  #Shows a paginated list of project incidents which can be filtered via ....
+  def index
+
+    @incident_correction_status = ( params[:incident] && has_value_params( params[:incident][:correction_status] ) ? params[:incident][:correction_status] : nil )
+    @incident_impact = ( params[:incident] && has_value_params( params[:incident][:impact] ) ? params[:incident][:impact] : nil )
+
+
+    conditionStm = project_incident_query_condition
+    limit = per_page_option
+
+    @incident_count = ProjectIncident.count(:conditions => conditionStm)
+    @incident_pages = Paginator.new self, @incident_count, limit, params['page']
+    @incidents = ProjectIncident.find :all,:conditions => conditionStm , :limit  => limit,
+                                      :offset => @incident_pages.current.offset
+                                      #:order => sort_clause, it could be added, but complex
+
+    render :template => 'project_incidents/index.rhtml', :layout => !request.xhr?
   end
 
-
-  #=create
-  #===If the request is a post and has the risk parameters, it updates the new risk and when is successfully saved, redirects to index
-  #===Otherwise it redirects to the risk creation view.
-  def create		
-	  @incident = ProjectIncident.new
-	  edit( @incident ,  params[:incident] , l(:notice_successful_create) , @project )	  	 	  	
+  #If the request is a post and has the risk parameters, it updates the new risk and when is successfully saved, redirects to index
+  #Otherwise it redirects to the risk creation view.
+  def create
+    @incident = ProjectIncident.new
+    edit( @incident ,  params[:incident] , l(:notice_successful_create) , @project )
   end
 
-
-  #=retrieve
-  #=== It shows the view of a specific project risk
+  #Shows the view of a specific project risk
   def retrieve
-	  	  	
   end
 
-  #=delete
-  #=== It deletes a project incident
+  #Deletes a project incident
   def delete
-	  	  	  	
-	  if @incident.destroy
-		  flash[:notice] = l(:notice_successful_delete)	  	  							
-	  end		
-	
-	 redirect_to :action => 'index', :project_id => @project
-	  	  	
+    if @incident.destroy
+      flash[:notice] = l(:notice_successful_delete)
+    end
+    redirect_to :action => 'index', :project_id => @project
   end
 
-  #=update
-  #===If the request is a post and has the project incident parameters,  the project incidence is updated and if it is successfully saved, redirects to index
-  #===Otherwise it redirects to the incidence update view.
-  def update		    	  	  	  	
-	  edit( @incident ,  params[:incident] , l(:notice_successful_update) , @project )
+  #If the request is a post and has the project incident parameters,  the project incidence is updated and if it is successfully saved, redirects to index
+  #Otherwise it redirects to the incidence update view.
+  def update
+    edit( @incident ,  params[:incident] , l(:notice_successful_update) , @project )
   end
 
-
-  #=preview
-  #=== It renders to "common/preview" to show the incident correction
-  #==== It is intended to be used on Ajax request to preview a specific text area
-  def preview	  	  		
-	  		  		
-	  @text =  params[:incident][:correction] if params[:incident]					
-	  		
-	  render :partial => 'common/preview'	
+  #Renders to "common/preview" to show the incident correction
+  #It is intended to be used on Ajax request to preview a specific text area
+  def preview
+    @text =  params[:incident][:correction] if params[:incident]
+    render :partial => 'common/preview'
   end
 
-
-  #=issues_index
-  #=== It redirects to the issues view of a specific project risk.
-  #=== The view shows the issues relates to the project risk and gives the possibility of manage them.
+  #Redirects to the issues view of a specific project risk.
+  #The view shows the issues relates to the project risk and gives the possibility of manage them.
   def issues_index
-	  	  	  	
+  end
+
+  #Add an issue selected through params[:issue][:id], to the specific project risk, when it is not present.
+  def issues_new
+    super( params[:issue][:id] , @incident , @project )
   end
 
 
-  #=issues_new
-  #=== Add a issue selected through params[:issue][:id], to the specific project risk, when it is not present.
-  def issues_new		  	
-	  super( params[:issue][:id] , @incident , @project )  	  	
+  #Delete an issue selected through params[:issue_id] from the specific project risk.
+  def issues_delete
+    super(params[:issue_id], @incident, @project)
   end
-
-
-  #=issues_delete
-  #=== Delete a issue selected through params[:issue_id] from the specific project risk.
-  def issues_delete	
-	  super(params[:issue_id], @incident, @project)	  		
-  end
-
-
-
 
   private
-  #== project_incident_query_condition
-  #=== It creates the query condition to be used on a project incident search
+  #Creates the query condition to be used on a project incident search
   def project_incident_query_condition
-	  # refactorable
-	  	 	
-	  result = "project_id=#{@project.id} AND"
-	  result << " correction_status=#{@incident_correction_status} AND" if has_value_params( @incident_correction_status )	
-	  result << " impact=#{@incident_impact} AND" if has_value_params( @incident_impact )
-	
-	
-	  result[0,result.length-3]	
+    # refactorable
+
+    result = "project_id=#{@project.id} AND"
+    result << " correction_status=#{@incident_correction_status} AND" if has_value_params( @incident_correction_status )
+    result << " impact=#{@incident_impact} AND" if has_value_params( @incident_impact )
+
+    result[0,result.length-3]
   end
 
-
-  #==find_project_incident
-  #===Set _incident_ depending on the _id_ and _project_id_ parameters
-  #===It renders to _render_404 when the _id_ cannot be found
+  #Set _incident_ depending on the _id_ and _project_id_ parameters
+  #It renders to _render_404 when the _id_ cannot be found
   def find_project_incident
-	  @incident = ProjectIncident.find params[:id],
-	  				   :conditions=>"project_id=#{@project.id}"	
-  	  rescue ActiveRecord::RecordNotFound
-	  	  render_404		
+    @incident = ProjectIncident.find params[:id], :conditions=>"project_id=#{@project.id}"
+    rescue ActiveRecord::RecordNotFound render_404
   end
-
 end
-
-
-

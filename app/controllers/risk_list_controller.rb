@@ -33,35 +33,27 @@
 #  See the Licence for the specific language governing permissions and limitations
 #  under the Licence.
 
-
-#=RiskListController
-#===It manages the list of well-known risks to be shown on the project risk section.
+#Manages the list of well-known risks to be shown on the project risk section.
 class RiskListController < BaseRiskApplicationController
-	unloadable
-	
-	before_filter :find_project
-	before_filter :require_login
-	before_filter :authorize
-	
-			
+  unloadable
 
-  #=index
-  #===It shows a list of well-known risks which can be filtered via category.	
+  before_filter :find_project
+  before_filter :require_login
+  before_filter :authorize
+
+  #Shows a list of well-known risks which can be filtered via category.
   def index
-	  @risk_status = Risk::STATUS_ACTIVE.to_i
-	  @risk_category_id =( params[:risk] ? params[:risk][:risk_category_id] : nil )
-	  	  	  	  	  	
-	  @select_categories = RiskCategory.find :all,
-	  				:conditions=>["status = ?", RiskCategory::STATUS_ACTIVE.to_i]
-	
-	  return render_404 if !@select_categories.nil? && @select_categories.size > 0 && @risk_category_id && !exist(  @select_categories , @risk_category_id )
-		  	
-	  risks_search	  	
-			   			
- 	  # Template rendering works just like action rendering except that it takes a path relative to the template root. The current layout is automatically applied. 				
-	  render :template => 'risk_list/index.rhtml', :layout => !request.xhr?	   		
+    @risk_status = Risk::STATUS_ACTIVE.to_i
+    @risk_category_id =( params[:risk] ? params[:risk][:risk_category_id] : nil )
+
+    @select_categories = RiskCategory.find :all, :conditions=>["status = ?", RiskCategory::STATUS_ACTIVE.to_i]
+
+    return render_404 if !@select_categories.nil? && @select_categories.size > 0 && @risk_category_id && !exist(@select_categories , @risk_category_id)
+
+    risks_search
+
+    #Template rendering works just like action rendering except that it takes a path relative to the template root.
+    #The current layout is automatically applied.
+    render :template => 'risk_list/index.rhtml', :layout => !request.xhr?
   end
-
-
-
 end

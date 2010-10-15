@@ -34,93 +34,68 @@
 #  under the Licence.
 
 
-#=RiskApplicationController
-#===This class represents the super class of all the controllers on the risk plugin
-#==== It inherits of _ApplicationController_
+#Represents the super class of all the controllers on the risk plugin
 class RiskApplicationController < ApplicationController
-	unloadable
-			
-	
+  unloadable
 
-  #==authorize_global
-  #===Authorize to access controllers which don't depends on a specific project
+  #Authorize to access controllers which don't depends on a specific project
   #* @param1= ctrl: default params[:controller]
   #* @param2= action: default params[:action]
   #* @returns= true if the user is allowed, otherwise redirect to _deny_access_ method
   protected
   def authorize_global(ctrl = params[:controller], action = params[:action])
-
     allowed = User.current.allowed_to?({:controller => ctrl, :action => action}, nil , :global => true)
     allowed ? true : deny_access
-
   end
 
-  #==find_project
-  #===Set the _project_ variable depending on the _project_id_ parameter
-  #===It renders to _render_404 when the _project_ cannot be found
+  #Set the _project_ variable depending on the _project_id_ parameter
+  #Renders to _render_404 when the _project_ cannot be found
   protected
   def find_project
      @project = Project.find( params[:project_id] )
-                # :all,
-     		#:conditions =>["identifier=?", params[:project_id] ]
-  rescue ActiveRecord::RecordNotFound	
-     render_404
+     rescue ActiveRecord::RecordNotFound render_404
+  end
+
+  #Find risks, risk_count, risk_pages depending on the parameters
+  protected
+  def risks_search
+
+    conditionStm = risk_query_condition
+    limit = per_page_option
+
+    @risk_count = Risk.count(:conditions => conditionStm)
+    @risk_pages = Paginator.new self, @risk_count, limit, params['page']
+    @risks = Risk.find :all, :conditions => conditionStm , :limit  =>  limit, :offset =>  @risk_pages.current.offset
   end
 
 
-
-
-
-  #== risks_search
-  #=== Find risks, risk_count, risk_pages depending on the parameters
+  #Creates the query condition to be used on a risk search
   protected
-  def risks_search		
-	
-	  conditionStm = risk_query_condition
-	  limit = per_page_option 	  	
-	
-	  @risk_count = Risk.count(:conditions => conditionStm)
-	  @risk_pages = Paginator.new self, @risk_count, limit, params['page']	  	  	
-	  @risks = Risk.find :all, 	  		
-			   :conditions => conditionStm ,
-                           :limit  =>  limit,
-                           :offset =>  @risk_pages.current.offset
-  end
-
-
-  #== risk_query_condition
-  #=== It creates the query condition to be used on a risk search
-  protected
-  def risk_query_condition		
+  def risk_query_condition
     # refactorable
     if has_value_params( @risk_status ) && has_value_params( @risk_category_id )
-	   ["status=? AND risk_category_id=?", @risk_status , @risk_category_id ]
+      ["status=? AND risk_category_id=?", @risk_status , @risk_category_id ]
     elsif has_value_params( @risk_status )
-	   ["status=? ", @risk_status ]	
+      ["status=? ", @risk_status ]
     elsif has_value_params( @risk_category_id )
-	   ["risk_category_id=?", @risk_category_id ]	
+      ["risk_category_id=?", @risk_category_id ]
     else
-	    nil	
+      nil
     end
   end
 
-  #== exist
-  #=== Returns true if an integer identifier "id" of a collection item is equal to id, otherwise false
+  #Returns true if an integer identifier "id" of a collection item is equal to id, otherwise false
   protected
-  def exist(collection, id)	  	
-	  for item in collection	
-		  return true if item.id.to_i == id.to_i		  		
-	  end	
-	  return false	
+  def exist(collection, id)
+    for item in collection
+      return true if item.id.to_i == id.to_i
+    end
+    return false
   end
 
-  #== has_value_params
-  #=== Returns true if _val_ is not null and blank, otherwise false
+  #Returns true if _val_ is not null and blank, otherwise false
   private
   def has_value_params(val)
-	  !val.nil? && !val.blank?	
+    !val.nil? && !val.blank?
   end
-
-
-
 end
