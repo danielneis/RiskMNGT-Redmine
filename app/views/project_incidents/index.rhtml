@@ -1,53 +1,53 @@
 <h2><%= l(:projectincidents_label) %></h2>
 
 <p><%= link_to l(:new_incident_label), :action => 'create', :project_id => @project %></p>
+
+<% form_for :news,:url => { :action => 'index', :project_id=> @project } do |f| %>
+
+  <fieldset>
+    <p>
+      <%= l(:field_status)   %>
+      <%= select 'incident', 'correction_status', correction_status_choices, {:include_blank => true, :selected => @incident_correction_status ? @incident_correction_status.to_i : nil} %>
+      <%= l(:field_impact) %>
+      <%= select 'incident', 'impact', level_choices, {:include_blank => true, :selected => @incident_impact ? @incident_impact.to_i : nil } %>
+      <%= submit_tag l(:button_apply)%>
+    </p>
+  </fieldset>
+ <% end %>
+
 <% if !@incidents.nil? && @incidents.size > 0 %>
 
-    <% form_for :news,:url => { :action => 'index', :project_id=> @project } do |f| %>
-
-      <fieldset>
-        <p>
-          <%= l(:field_status)   %>
-          <%= select 'incident', 'correction_status', correction_status_choices, {:include_blank => true, :selected => @incident_correction_status ? @incident_correction_status.to_i : nil} %>
-          <%= l(:field_impact) %>
-          <%= select 'incident', 'impact', level_choices, {:include_blank => true, :selected => @incident_impact ? @incident_impact.to_i : nil } %>
-          <%= submit_tag l(:button_apply)%>
-        </p>
-      </fieldset>
-
-      <table class="list">
-       <thead>
+    <table class="list">
+      <thead>
         <th align="left"><%= l(:field_name) %></th>
         <th align="left"><%= l(:field_correction_status) %></th>
         <th align="left"><%= l(:field_impact) %></th>
         <th align="left"><%= l(:label_issue_plural) %> *</th>
         <th></th>
         <th></th>
-       </thead>
-       <tbody>
-       <%
-       if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",@project.id,"requirement_tool"]) != nil
-            baseline= get_current_project_baseline(@project.id)
-            @incidents =filter_incidents_by_baseline (baseline, @project.id, @incidents )
-       end
-       
-       for incident in @incidents
-         unless incident.new_record? %>
-           <tr class="<%= cycle 'odd', 'even' %>">
-             <td><b><%= link_to h(incident.name), {:action => 'show', :id => incident , :project_id => @project }%></b></td>
-             <td><%= correction_status_label incident.correction_status.to_i %></td>
-             <td><%=h(incident.impact) %></td>
-             <td> <%= link_to incident.issues.size, { :action => 'issues_index', :id => incident,  :project_id=> @project } %></td>
-             <td align="center"><%= link_to l(:button_edit), {  :action => 'update', :id => incident , :project_id => @project }, :class => 'icon icon-edit' %></td>
-             <td align="center"><%= link_to l(:button_delete), {:action => 'delete', :id => incident , :project_id => @project }, :method => :post, :class => 'icon icon-del', :confirm => l(:will_be_deleted_label, incident.name) %></td>
-           </tr>
-       <% end
-       end %>
-       </tbody>
-     </table>
-
-     <p class="pagination"><%= pagination_links_full @incident_pages, @incident_count %></p>
-     <% end %>
+      </thead>
+      <tbody>
+     <%
+      if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",@project.id,"requirement_tool"]) != nil
+           baseline= get_current_project_baseline(@project.id)
+           @incidents =filter_incidents_by_baseline (baseline, @project.id, @incidents )
+      end
+     
+      for incident in @incidents
+        unless incident.new_record? %>
+          <tr class="<%= cycle 'odd', 'even' %>">
+            <td><b><%= link_to h(incident.name), {:action => 'show', :id => incident , :project_id => @project }%></b></td>
+            <td><%= correction_status_label incident.correction_status.to_i %></td>
+            <td><%=h(incident.impact) %></td>
+            <td> <%= link_to incident.issues.size, { :action => 'issues_index', :id => incident,  :project_id=> @project } %></td>
+            <td align="center"><%= link_to l(:button_edit), {  :action => 'update', :id => incident , :project_id => @project }, :class => 'icon icon-edit' %></td>
+            <td align="center"><%= link_to l(:button_delete), {:action => 'delete', :id => incident , :project_id => @project }, :method => :post, :class => 'icon icon-del', :confirm => l(:will_be_deleted_label, incident.name) %></td>
+          </tr>
+      <% end
+      end %>
+      </tbody>
+    </table>
+    <p class="pagination"><%= pagination_links_full @incident_pages, @incident_count %></p>
 <% else %>
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>

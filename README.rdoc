@@ -23,5 +23,5 @@ Started by Isotrol and fostered by Daniel Neis Araujo.
 
 * Replace "Preview mitigation" and "Preview contingency" with just one preview for the whole risk
 * Made categories not mandatory when creating risks
+* Made description mandatory when creating risks
 * Allow to create categories in project level
-* Show filter in incidents index when there is no data to display
