@@ -38,8 +38,8 @@ class RiskCategoriesController < BaseRiskApplicationController
   unloadable
 
   before_filter :require_login
-  before_filter :authorize_global , :except => [:retrieve]
-  before_filter :find_risk_category, :only => [:update, :delete, :retrieve]
+  before_filter :authorize_global , :except => [:show]
+  before_filter :find_risk_category, :only => [:update, :delete, :show]
   verify  :method => :post, :only => :delete
 
   #Shows the list of risk categories
@@ -54,8 +54,8 @@ class RiskCategoriesController < BaseRiskApplicationController
     edit( @category ,  params[:category] , l(:notice_successful_create) )
   end
 
-  #It executes _find_risk_category_ and shows the view of the specific risk category
-  def retrieve
+  #Shows the view of the specific risk category
+  def show
   end
 
   #If the request is a post and has the risk category parameters (params[:category][:name]....), it updates the category and if it is successfully saved, redirects to index

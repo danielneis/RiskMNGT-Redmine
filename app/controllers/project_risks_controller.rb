@@ -38,7 +38,7 @@ class ProjectRisksController < BaseRiskApplicationController
   unloadable
 
   before_filter :find_project , :except => [:preview, :update_selectable_risks]
-  before_filter :find_project_risk , :only => [:update, :delete, :retrieve, :issues_new, :issues_index, :issues_delete]
+  before_filter :find_project_risk , :only => [:update, :delete, :show, :issues_new, :issues_index, :issues_delete]
   before_filter :require_login
   before_filter :authorize, :except => [:preview , :update_selectable_risks]
   verify :method => :post, :only => [:delete]
@@ -87,7 +87,7 @@ class ProjectRisksController < BaseRiskApplicationController
   end
 
   #Shows the view of a specific project risk
-  def retrieve
+  def show
   end
 
   #Deletes a project risk

@@ -1,0 +1,31 @@
+<%= render(:partial => 'risk_admin_section/header', :locals => { :tab=>'risks' } ) %>
+
+<h2><%= l(:risk_label) %></h2>
+
+<% unless @risk.nil? %>
+
+<div class="box tabular">
+
+  <p><label><%= l(:field_id) %>:</label> <%=h(@risk.id) %></p>
+
+  <p><label><%= l(:field_name) %>:</label> <%=h(@risk.name) %></p>
+
+  <p><label><%= l(:field_description) %>:</label> <%=h(@risk.description) %></p>
+
+  <p><label><%= l(:field_status) %>:</label><%= risk_status_label @risk.status.to_i %></p>
+
+  <p>
+    <label><%= l(:field_risk_category) %>: </label>
+    <%= link_to h(@risk.risk_category.name), {  :controller => 'risk_categories' ,  :action => 'show', :id =>  @risk.risk_category } unless @risk.risk_category.nil? %>
+  </p>
+</div>
+
+<label><b><%= l(:field_mitigation) %></b> </label>
+
+<div class="wiki"><%= textilizable(@risk.mitigation) %></div>
+
+<label><b><%= l(:field_contingency) %></b> </label>
+
+<div class="wiki"><%= textilizable(@risk.contingency) %></div>
+
+<% end %>

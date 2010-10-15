@@ -54,13 +54,13 @@ Redmine::Plugin.register :redmine_risks do
 
   project_module :risks do
      permission :project_risks,
-                :project_risks=> [ :index, :create ,:retrieve, :update, :delete, :issues_index, :issues_new , :issues_delete ],
-                :project_incidents=> [ :index, :create ,:retrieve, :update, :delete, :issues_index, :issues_new , :issues_delete ],
+                :project_risks => [:index, :create ,:show, :update, :delete, :issues_index, :issues_new , :issues_delete],
+                :project_incidents => [:index, :create ,:show, :update, :delete, :issues_index, :issues_new , :issues_delete],
                 :risk_list=> [:index],
                 :project_risk_statistics=> [:index]
   end
 
   permission :risk_admin_permission,
-             :risk_categories=> [ :index, :create ,:retrieve, :update, :delete ],
-             :risks=> [ :index, :create ,:retrieve, :update, :delete ]
+             :risk_categories => [:index, :create ,:show, :update, :delete],
+             :risks => [:index, :create ,:show, :update, :delete]
 end

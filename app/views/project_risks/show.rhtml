@@ -32,9 +32,9 @@
     </tr>
     <tr>
       <td><%= l(:field_risk_category)%>:</td>
-      <td><%= link_to h(@project_risk.risk_category.name), {  :controller => 'risk_categories' ,  :action => 'retrieve', :id =>  @project_risk.risk_category } unless @project_risk.risk_category.nil? %></td>
+      <td><%= link_to h(@project_risk.risk_category.name), {  :controller => 'risk_categories' ,  :action => 'show', :id =>  @project_risk.risk_category } unless @project_risk.risk_category.nil? %></td>
       <td><%= l(:field_risk)%>:</td>
-      <td><%= link_to h(@project_risk.risk.name), {  :controller => 'risks' ,  :action => 'retrieve', :id =>  @project_risk.risk } unless @project_risk.risk.nil? %></td>
+      <td><%= link_to h(@project_risk.risk.name), {  :controller => 'risks' ,  :action => 'show', :id =>  @project_risk.risk } unless @project_risk.risk.nil? %></td>
     </tr>
     <tr>
       <td><%= l(:field_detection_datetime)%>:</td>

@@ -2,87 +2,71 @@
 
 <h2><%= l(:projectrisks_label) %></h2>
 
-
 <% if !@risks.nil? && @risks.size > 0 %>
 
+    <% form_for :news,:url => { :action => 'index', :project_id=> @project } do |f| %>
 
+    <fieldset>
+      <p>
+        <%= l(:field_status) %>
+        <%= select 'risk', 'mitigation_status' , mitigation_status_choices  ,  {:include_blank => 'None' , :selected =>  @risk_mitigation_status ? @risk_mitigation_status.to_i : nil } %>
+        &nbsp;
+        <%= l(:field_risk_category) %>
+        <%= select 'risk','risk_category_id' ,@select_categories.collect {|u| [u.name,u.id]} , {:include_blank => 'None' , :selected =>  @risk_category_id ? @risk_category_id.to_i : nil } %>
+        &nbsp;
+        <%= l(:field_probability) %>
+        <%= select 'risk', 'probability' , level_choices  ,  {:include_blank => 'None' , :selected =>  @risk_probability ? @risk_probability.to_i : nil } %>
+        &nbsp;
+        <%= l(:field_impact) %>
+        <%= select 'risk', 'impact' , level_choices  ,  {:include_blank => 'None' , :selected =>  @risk_impact ? @risk_impact.to_i : nil } %>
+        &nbsp;
+        <%= l(:field_exposure) %>
+        <%= select 'risk', 'exposure' , exposure_level_choices  ,  {:include_blank => 'None' , :selected =>  @exposure ? @exposure.to_i : nil } %>
+        &nbsp;&nbsp;
+        <%= submit_tag l(:button_apply)%>
+      </p>
+    </fieldset>
 
-<% form_for :news,:url => { :action => 'index', :project_id=> @project } do |f| %>
+    <table class="list">
+      <thead>
+        <th align="left"><%= l(:field_name) %></th>
+        <th align="left"><%= l(:field_mitigation_status) %></th>
+        <th align="left"><%= l(:field_risk_category) %></th>
+        <th align="left"><%= l(:field_probability) %></th>
+        <th align="left"><%= l(:field_impact) %></th>
+        <th align="left"><%= l(:field_exposure) %></th>
+        <th align="left"><%= l(:label_issue_plural) %> *</th>
+        <th></th>
+        <th></th>
+       </thead>
+       <tbody>
+       <%
+       if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",@project.id,"requirement_tool"]) != nil
+         baseline= get_current_project_baseline(@project.id)
+         @risks =filter_risks_by_baseline (baseline, @project.id, @risks )
+       end
 
-<fieldset>
-	<p>
-		<%= l(:field_status) %>
-		<%= select 'risk', 'mitigation_status' , mitigation_status_choices  ,  {:include_blank => 'None' , :selected =>  @risk_mitigation_status ? @risk_mitigation_status.to_i : nil } %>
-		&nbsp;
-		<%= l(:field_risk_category) %>
-		<%= select 'risk','risk_category_id' ,@select_categories.collect {|u| [u.name,u.id]} , {:include_blank => 'None' , :selected =>  @risk_category_id ? @risk_category_id.to_i : nil } %>
-
-		&nbsp;
-		<%= l(:field_probability) %>
-		<%= select 'risk', 'probability' , level_choices  ,  {:include_blank => 'None' , :selected =>  @risk_probability ? @risk_probability.to_i : nil } %>
-		
-		&nbsp;
-		<%= l(:field_impact) %>
-		<%= select 'risk', 'impact' , level_choices  ,  {:include_blank => 'None' , :selected =>  @risk_impact ? @risk_impact.to_i : nil } %>
-		
-		&nbsp;
-		<%= l(:field_exposure) %>
-		<%= select 'risk', 'exposure' , exposure_level_choices  ,  {:include_blank => 'None' , :selected =>  @exposure ? @exposure.to_i : nil } %>
-
-		&nbsp;&nbsp;
-		<%= submit_tag l(:button_apply)%>		
-	</p>		
-</fieldset>
-
-
-
-<table class="list">
- <thead>
-	<th align="left"><%= l(:field_name) %></th>	
-	<th align="left"><%= l(:field_mitigation_status) %></th>
-	<th align="left"><%= l(:field_risk_category) %></th>
-	<th align="left"><%= l(:field_probability) %></th>	
-	<th align="left"><%= l(:field_impact) %></th>
-	<th align="left"><%= l(:field_exposure) %></th>
-	<th align="left"><%= l(:label_issue_plural) %> *</th>			
-	<th></th>
-	<th></th>
-	
- </thead> 	
- <tbody>
-
- <%
-    if EnabledModule.find(:first,:conditions=>["project_id = ? and name = ?",@project.id,"requirement_tool"]) != nil
-	baseline= get_current_project_baseline(@project.id)
-	@risks =filter_risks_by_baseline (baseline, @project.id, @risks )
-
-    end			%>
-  <% for risk in @risks %>
-    <% unless risk.new_record? %>
-	<tr class="<%= cycle 'odd', 'even' %>">
-		<td><b><%= link_to h(risk.name), {  :action => 'retrieve', :id => risk , :project_id => @project }%></b></td>										
-		<td><%= status_label risk.mitigation_status.to_i %></td>
-		
-		<td><%=h(risk.risk_category.name) unless risk.risk_category.nil? %></td>
-		<td><%=h(risk.probability) %></td>
-		<td><%=h(risk.impact) %></td>
-		<td><%=h(risk.exposure) %></td>
-			
-		<td> <%= link_to risk.issues.size, { :action => 'issues_index', :id => risk,  :project_id=> @project } %></td>
-		<td align="center"><%= link_to l(:button_edit), {  :action => 'update', :id => risk , :project_id => @project }, :class => 'icon icon-edit' %></td>		
-		<td align="center"><%= link_to l(:button_delete), {:action => 'delete', :id => risk , :project_id => @project }, :method => :post, :class => 'icon icon-del', :confirm => l(:will_be_deleted_label, risk.name) %></td>
-	</tr>
+       for risk in @risks
+          unless risk.new_record? %>
+            <tr class="<%= cycle 'odd', 'even' %>">
+              <td><b><%= link_to h(risk.name), {  :action => 'show', :id => risk , :project_id => @project }%></b></td>
+              <td><%= status_label risk.mitigation_status.to_i %></td>
+              <td><%=h(risk.risk_category.name) unless risk.risk_category.nil? %></td>
+              <td><%=h(risk.probability) %></td>
+              <td><%=h(risk.impact) %></td>
+              <td><%=h(risk.exposure) %></td>
+              <td><%= link_to risk.issues.size, { :action => 'issues_index', :id => risk,  :project_id=> @project } %></td>
+              <td align="center"><%= link_to l(:button_edit), {  :action => 'update', :id => risk , :project_id => @project }, :class => 'icon icon-edit' %></td>
+              <td align="center"><%= link_to l(:button_delete), {:action => 'delete', :id => risk , :project_id => @project }, :method => :post, :class => 'icon icon-del', :confirm => l(:will_be_deleted_label, risk.name) %></td>
+            </tr>
+       <% end
+       end %>
+       </tbody>
+    </table>
+    <p class="pagination"><%= pagination_links_full @risk_pages, @risk_count %></p>
     <% end %>
-  <% end %>
-
- </tbody>
-</table>
-
-<p class="pagination"><%= pagination_links_full @risk_pages, @risk_count %></p>
-
-<% end %>
 <% else %>
-	<p class="nodata"><%= l(:label_no_data) %></p>
+  <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
 
 <p><%= link_to l(:new_risk_label), :action => 'create', :project_id => @project %></p>
