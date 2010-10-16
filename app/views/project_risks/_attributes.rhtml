@@ -1,0 +1,44 @@
+<% fields_for :project_risk, @issue, :builder => TabularFormBuilder do |f| %>
+
+<div class="splitcontentleft">
+<p><%= f.select :impact,  level_choices , :required => true %></p>
+<p><%= f.select :probability,  level_choices  , :required => true %></p>
+
+<p><%= f.select :risk_category_id , (@select_categories.collect {|u| [u.name,u.id]}) , :required => true %></p>
+<%= observe_field :project_risk_risk_category_id,
+                  :url => { :action => 'update_selectable_risks', :project_risk_id => @project_risk.id },
+                  :update => :select_risk,
+                  :with => 'project_risk_risk_category_id' %>
+</div>
+
+<div class="splitcontentright">
+<p><%= f.text_field :detection_datetime, :size => 10 %><%= calendar_for('project_risk_detection_datetime') %></p>
+<p><%= f.text_field :closed_datetime, :size => 10 %><%= calendar_for('project_risk_closed_datetime') %></p>
+<p><%= f.select :risk, (@select_risks.collect {|u| [u.name,u.id]}) %></p>
+</div>
+
+<div style="clear:both;"> </div>
+
+<h3><%=l(:field_mitigation)%></h3>
+<div id="mitigation-div">
+<p><%= f.select :mitigation_status,  mitigation_status_choices , :selected => @project_risk.mitigation_status.to_i   , :required => true %></p>
+<p><%= f.text_field :resolution_datetime, :size => 10 %><%= calendar_for('project_risk_resolution_datetime') %></p>
+<p> <%= f.text_area :mitigation,
+                    :cols => 60,
+                    :rows => (@project_risk.mitigation.blank? ? 10 : [[10, @project_risk.mitigation.length / 50].max, 100].min),
+                    :accesskey => accesskey(:edit),
+                    :class => 'wiki-edit' %></p>
+</div>
+
+<h3><%=l(:field_contingency)%></h3>
+<div id="contingency-div">
+<p><%= f.text_field :contingency_responsable, :size=>100 %></p>
+<p><%= f.text_area :contingency,
+                   :cols => 60,
+                   :rows => (@project_risk.contingency.blank? ? 10 : [[10, @project_risk.contingency.length / 50].max, 100].min),
+                   :accesskey => accesskey(:edit),
+                   :class => 'wiki-edit' %></p>
+</div>
+<% end %>
+<%= wikitoolbar_for 'project_risk_mitigation' %>
+<%= wikitoolbar_for 'project_risk_contingency' %>

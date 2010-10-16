@@ -1,6 +1,0 @@
-<% unless selectable_risks.nil? %>
-<p>	
-	<label><%=l(:field_risk) %></label>
-	<%= select :project_risk, 'risk_id' , (selectable_risks.collect {|u| [u.name,u.id]}) ,:selected=> f.risk ? f.risk.id : nil , :include_blank =>  l(:none_label) %> 			
-</p>
-<% end %>

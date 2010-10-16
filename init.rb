@@ -54,7 +54,7 @@ Redmine::Plugin.register :redmine_risks do
 
   project_module :risks do
      permission :project_risks,
-                :project_risks => [:index, :create ,:show, :update, :destroy, :issues_index, :issues_new , :issues_delete],
+                :project_risks => [:index, :new, :create ,:show, :update, :destroy, :issues_index, :issues_new , :issues_delete],
                 :project_incidents => [:index, :create ,:show, :update, :destroy, :issues_index, :issues_new , :issues_delete],
                 :risk_list=> [:index],
                 :project_risk_statistics=> [:index]

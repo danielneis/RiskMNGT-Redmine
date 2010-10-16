@@ -1,6 +1,6 @@
 <h2><%= l(:projectrisks_label) %></h2>
 
-<p><%= link_to l(:new_risk_label), :action => 'create', :project_id => @project %></p>
+<p><%= link_to l(:new_risk_label), :action => 'new', :project_id => @project %></p>
 
 <% form_for :news,:url => { :action => 'index', :project_id=> @project } do |f| %>
 

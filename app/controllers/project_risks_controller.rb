@@ -41,6 +41,7 @@ class ProjectRisksController < BaseRiskApplicationController
   before_filter :find_project_risk , :only => [:update, :destroy, :show, :issues_new, :issues_index, :issues_delete]
   before_filter :require_login
   before_filter :authorize, :except => [:preview , :update_selectable_risks]
+  before_filter :build_new_project_risk_from_params, :only => [:new, :create]
   verify :method => :post, :only => [:destroy]
 
   helper :sort
@@ -81,9 +82,17 @@ class ProjectRisksController < BaseRiskApplicationController
   #If the request is a post and has the risk parameters,
   #it updates the new risk and when is successfully saved and redirects to index
   #Otherwise it redirects to the risk creation view.
-  def create
-    @project_risk = ProjectRisk.new
-    edit( l(:notice_successful_create)  )
+  def create 
+    if @project_risk.save
+      redirect_to(params[:continue] ?  {:action => 'new', :project_id => @project} : {:action => 'show', :id => @project_risk})
+    else
+      render :action => 'new'
+    end
+  end
+
+  def new
+    @select_categories = RiskCategory.find :all, :conditions=>["status = ?", RiskCategory::STATUS_ACTIVE.to_i]
+    @select_risks = Risk.find :all, :conditions=>["status = ? AND risk_category_id=?",Risk::STATUS_ACTIVE.to_i, @project_risk.risk_category_id ]
   end
 
   #Deletes a project risk
@@ -135,29 +144,19 @@ class ProjectRisksController < BaseRiskApplicationController
   #It is intended to be used on Ajax request to render partially to project_risks/select_risk
   def update_selectable_risks
     project_risk_id = params[:project_risk_id]
-    setSelectableRisks( params[:project_risk_risk_category_id] )
     @project_risk = (project_risk_id.nil? || project_risk_id.blank? ) ? ProjectRisk.new : ProjectRisk.find(project_risk_id.to_i)
-    render :partial => 'project_risks/select_risk', :locals => {:f=> @project_risk,  :selectable_risks => @select_risks }
+    @select_risks = Risk.find :all, :conditions=>["status = ? AND risk_category_id=?",Risk::STATUS_ACTIVE.to_i, @project_risk.risk_category_id ]
   end
 
   private
-
-  #Set _select_risks_ with all the risks with status active and belongs to a risk category whose id is equal to _risk_category_id_
-  #* @param1= risk_category_id: identifier of a risk category.
-  def setSelectableRisks(risk_category_id)
-    @select_risks = Risk.find :all, :conditions=>["status = ? AND risk_category_id=?",Risk::STATUS_ACTIVE.to_i, risk_category_id ]
-  end
 
   #If the request is a post and has the risk parameters (params[:risk][:name]....), it sets the properties of the _risk_ variable depending on the risk parametes and saves the item
   #When the item is sucessfully saved, it redirects to index.
   def edit( notice_successful )
     super( @project_risk ,  params[:project_risk] , notice_successful , @project )
-
-    @select_categories = RiskCategory.find :all, :conditions=>["status = ?", RiskCategory::STATUS_ACTIVE.to_i]
-
     @project_risk.risk_category = @select_categories.first if @project_risk.risk_category.nil?
-
-    setSelectableRisks( @project_risk.risk_category.id )
+    @select_categories = RiskCategory.find :all, :conditions=>["status = ?", RiskCategory::STATUS_ACTIVE.to_i]
+    @select_risks = Risk.find :all, :conditions=>["status = ? AND risk_category_id=?",Risk::STATUS_ACTIVE.to_i, @project_risk.risk_category.id ]
   end
 
   #Creates the query condition to be used on a project risk search
@@ -176,8 +175,17 @@ class ProjectRisksController < BaseRiskApplicationController
   #Set the _project_risk_ variable depending on the _id_ and _project_id_ parameters
   #Renders to _render_404 when the _project_risk_ cannot be found
   def find_project_risk
-    @project_risk = ProjectRisk.find params[:id], :conditions=>"project_id=#{@project.id}"
+    @project_risk = ProjectRisk.find :conditions=>"project_id=#{@project.id}"
     rescue ActiveRecord::RecordNotFound
       render_404
+  end
+
+  def build_new_project_risk_from_params
+    if params[:id].blank?
+      @project_risk = ProjectRisk.new
+      @project_risk.project = @project
+    else
+      @project_risk = ProjectRisks.find params[:id], :conditions => "project_id=#{@project.id}"
+    end
   end
 end
