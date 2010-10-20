@@ -1,0 +1,37 @@
+<div class="contextual">
+<% if authorize_for('project_risks', 'issues_new') %>
+  <%= toggle_link l(:button_add), 'new-relation-form', {:focus => 'issues'} %>
+<% end %>
+</div>
+
+<p><strong><%=l(:label_related_issues)%></strong></p>
+
+<% if @project_risk.issues.any? %>
+    <table style="width:100%">
+    <% @project_risk.issues.select {|r| r.visible? }.each do |relation| %>
+      <tr>
+        <td>
+          <%= h(relation.project) + ' - ' if Setting.cross_project_issue_relations? %>
+          <%= link_to_issue(relation, :truncate => 60) %>
+        </td>
+        <td><%= relation.status.name %></td>
+        <td><%= format_date(relation.start_date) %></td>
+        <td><%= format_date(relation.due_date) %></td>
+        <td>
+          <%= link_to_remote(image_tag('delete.png'),
+                             {:url => {:action => 'issues_delete', :issue_id => relation, :project_risk_id => @project_risk},
+                              :method => :post
+                             }, :title => l(:label_relation_delete)) if authorize_for('project_risks', 'issue_delete') %>
+        </td>
+      </tr>
+    <% end %>
+    </table>
+<% end %>
+
+<% remote_form_for(:project_risk, @project_risk, 
+                   :url => {:action => 'issues_new'},
+                   :method => :post,
+                   :complete => "Form.Element.focus('issues');",
+                   :html => {:id => 'new-relation-form', :style => (@project_id ? '' : 'display: none;')}) do |f| %>
+<%= render :partial => 'issues_form', :locals => {:f => f}%>
+<% end %>

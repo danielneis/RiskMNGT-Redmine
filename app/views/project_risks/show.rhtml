@@ -40,10 +40,16 @@
     </tr>
   </table>
 
-  <p><strong><%=l(:field_description)%></strong></p>
   <div class="wiki">
     <%= textilizable @project_risk, :description %>
   </div>
+
+  <% if authorize_for('issue_relations', 'new') || @project_risk.issues.any? %>
+  <hr />
+  <div id="relations">
+  <%= render :partial => 'related_issues' %>
+  </div>
+  <% end %>
 </div>
 
 <div class="issue details">
@@ -57,7 +63,7 @@
     </tr>
   </table>
 
-  <p><strong><%=l(:field_description)%></strong></p>
+  <hr />
   <div class="wiki">
     <%= textilizable(@project_risk.mitigation) %></p>
   </div>
@@ -72,37 +78,10 @@
     </tr>
   </table>
 
-  <p><strong><%=l(:field_description)%></strong></p>
   <div class="wiki">
     <%= textilizable(@project_risk.contingency) %></p>
   </div>
 </div>
-
-<% if @project_risk.issues.any? %>
-<h3><%=l(:label_related_issues)%></h3>
-  <div id="issues-div">
-    <table class="list">
-      <thead>
-        <th><%= l(:field_name) %></th>
-        <th><%= l(:field_subject) %></th>
-        <th><%= l(:field_status) %></th>
-        <th><%= l(:field_start_date) %></th>
-        <th><%= l(:field_due_date) %></th>
-      </thead>
-      <tbody>
-      <% @project_risk.issues.each do |issue| %>
-        <tr class="<%= cycle 'odd', 'even' %>">
-          <td><%= h(issue.project) + ' - ' if Setting.cross_project_issue_relations? %> <%= link_to_issue issue %></td>
-          <td><%=issue.subject %></td>
-          <td><%= issue.status.name %></td>
-          <td><%= format_date(issue.start_date) %></td>
-          <td><%= format_date(issue.due_date) %></td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
-<% end %>
 
 <% content_for :sidebar do %>
     <%= render :partial => 'sidebar' %>
