@@ -1,14 +1,14 @@
 <h3><%= l(:projectrisks_label) %></h3>
 
-<%= link_to  l(:projectrisks_label),
+<%= link_to  l(:label_project_risks_view_all),
              {:controller => "project_risks", :action => "index", :project_id => @project.id},
              :class => ("project_risks"!= local_assigns[:tab] ? nil : 'selected')%><br />
 
-<%= link_to  l(:projectincidents_label),
+<%= link_to  l(:label_project_incidents_view_all),
              {:controller => "project_incidents",:action => "index", :project_id => @project.id},
              :class => ('project_incidents'!= local_assigns[:tab] ? nil : 'selected')%><br />
 
-<%= link_to  l(:risklist_label),
+<%= link_to  l(:label_risks_view_all),
              {:controller => "risk_list",:action => "index", :project_id => @project.id},
              :class => ('risk_list'!= local_assigns[:tab] ? nil : 'selected')%><br />
 

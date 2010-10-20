@@ -16,6 +16,10 @@ en:
   risk_category_label: "Risk category"
   new_risk_label: "New risk"
 
+  label_project_incidents_view_all: "View all project incidents"
+  label_project_risks_view_all: "View all project risks"
+  label_risks_view_all: "View all well-known risks"
+
   not_allowed_to_delete_category_with_associated_risks_label: "It is not allowed to delete a category with associated risks."
   not_allowed_to_delete_category_with_associated_project_risks_label: "It is not allowed to delete a category with associated project risks."
   not_allowed_to_delete_risk_with_associated_project_risks_label: "It is not allowed to delete a risk with associated project risks."
