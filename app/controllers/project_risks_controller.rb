@@ -38,10 +38,10 @@ class ProjectRisksController < BaseRiskApplicationController
   menu_item :risks
 
   before_filter :find_project , :except => [:preview, :update_selectable_risks]
-  before_filter :find_project_risk , :only => [:update, :destroy, :show, :issues_new, :issues_index, :issues_delete]
+  before_filter :find_project_risk , :only => [:update, :destroy, :show, :issues_new, :issues_delete]
   before_filter :require_login
   before_filter :authorize, :except => [:preview , :update_selectable_risks]
-  verify :method => :post, :only => [:destroy]
+  verify :method => :post, :only => [:destroy, :issues_new]
 
   helper :sort
   include SortHelper
@@ -114,11 +114,6 @@ class ProjectRisksController < BaseRiskApplicationController
     end
 
     render :partial => 'common/preview'
-  end
-
-  #Redirects to the issues view of a specific project risk.
-  #The view shows the issues relates to the project risk and gives the possibility of manage them.
-  def issues_index
   end
 
   #Add a issue selected through params[:issue][:id], to the specific project risk, when it is not present.

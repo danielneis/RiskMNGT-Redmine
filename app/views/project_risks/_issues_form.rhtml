@@ -1,4 +1,4 @@
 <%= error_messages_for 'relation' %>
-<%= l(:label_issue) %> #<%= f.text_field :issues, :size => 6 %>
+<%= l(:label_issue) %> #<%= f.text_field :issues, :size => 6, :value => '' %>
 <%= submit_tag l(:button_add) %>
 <%= toggle_link l(:button_cancel), 'new-relation-form'%>

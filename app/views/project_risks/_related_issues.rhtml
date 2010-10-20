@@ -29,7 +29,7 @@
 <% end %>
 
 <% remote_form_for(:project_risk, @project_risk, 
-                   :url => {:action => 'issues_new'},
+                   :url => {:action => 'issues_new', :project_id => @project_risk},
                    :method => :post,
                    :complete => "Form.Element.focus('issues');",
                    :html => {:id => 'new-relation-form', :style => (@project_id ? '' : 'display: none;')}) do |f| %>

@@ -88,37 +88,37 @@ class BaseRiskApplicationController < ApplicationController
   end
 
   #Add a issue selected via _issue_id to the _obj_, when _obj_ has no associated the specific issue on its issues list
-  #Redirect to issues_index view
   protected
-  def issues_new( issue_id, obj, project )
-
-    # it could return error messages
-    if Issue.exists?( issue_id ) &&
-       !obj.issues.exists?( issue_id )
-
-      obj.issues << Issue.find( issue_id )
-      obj.save
+  def issues_new issue_id, obj, project
+    if (Issue.exists? issue_id) && (!obj.issues.exists? issue_id) then
+      obj.issues << Issue.find(issue_id)
     end
-
-    # it could be refactored
-    redirect_to :action => 'issues_index', :id => obj , :project_id => project
+    obj.save if request.post?
+    respond_to do |format|
+      format.html { redirect_to :controller => 'project_risks', :action => 'show', :id => obj }
+      format.js do
+        render :update do |page|
+          page.replace_html "relations", :partial => 'project_risks/related_issues'
+          if obj.errors.empty?
+            page << "$('issue_id').value = ''"
+          end
+        end
+      end
+    end
   end
 
   #Delete a issue selected via _issue_id_ from the issue list of _obj_
   #Redirect to issues_index view
   protected
-  def issues_delete( issue_id, obj, project )
+  def issues_delete issue_id, obj, project
     begin
-      issue = Issue.find( issue_id )
+      issue = Issue.find issue_id
     rescue ActiveRecord::RecordNotFound
       render_404
       return
     end
 
-    obj.issues.delete( issue  ) #if @project_risk.issues.exists?( params[:issue_id]  )
-
-    # it could be refactored
-    redirect_to :action => 'issues_index', :id =>obj , :project_id => project
+    obj.issues.delete issue
   end
 
   #Find risks, risk_count, risk_pages depending on the parameters
