@@ -36,7 +36,6 @@
         <th align="left"><%= l(:field_probability) %></th>
         <th align="left"><%= l(:field_impact) %></th>
         <th align="left"><%= l(:field_exposure) %></th>
-        <th align="left"><%= l(:label_issue_plural) %> *</th>
        </thead>
        <tbody>
        <%
@@ -54,7 +53,6 @@
               <td><%=h(risk.probability) %></td>
               <td><%=h(risk.impact) %></td>
               <td><%=h(risk.exposure) %></td>
-              <td><%= link_to risk.issues.size, { :action => 'issues_index', :id => risk,  :project_id=> @project } %></td>
             </tr>
        <% end
        end %>

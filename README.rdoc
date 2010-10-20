@@ -16,8 +16,7 @@ Started by Isotrol and fostered by Daniel Neis Araujo.
 
 = Known Bugs
 
-* I18n::MissingInterpolationArgument in Project_risks#issues_index, after associate an issue with the risk
-* I18n::MissingInterpolationArgument in Project_incidents#issues_index, after associate and issue with the incident
+There is no bugs known at this moment.
 
 = Roadmap
 

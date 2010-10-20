@@ -22,7 +22,7 @@
         <th align="left"><%= l(:field_name) %></th>
         <th align="left"><%= l(:field_correction_status) %></th>
         <th align="left"><%= l(:field_impact) %></th>
-        <th align="left"><%= l(:label_issue_plural) %> *</th>
+        <th align="left"><%= l(:field_author) %></th>
       </thead>
       <tbody>
      <%
@@ -37,7 +37,7 @@
             <td><b><%= link_to h(incident.name), {:action => 'show', :id => incident , :project_id => @project }%></b></td>
             <td><%= correction_status_label incident.correction_status.to_i %></td>
             <td><%=h(incident.impact) %></td>
-            <td> <%= link_to incident.issues.size, { :action => 'issues_index', :id => incident,  :project_id=> @project } %></td>
+            <td><%=h(incident.author.name) %></td>
           </tr>
       <% end
       end %>
