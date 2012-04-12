@@ -1,6 +1,7 @@
+<% plugin_name = File.basename(File.expand_path("../../..", File.dirname(__FILE__))) %>
 <% content_for :header_tags do %>
-    <%= javascript_include_tag 'risks', :plugin => 'redmine_risks' %>
-    <%= stylesheet_link_tag 'risks', :plugin => 'redmine_risks' %>
+    <%= javascript_include_tag 'risks', :plugin => plugin_name %>
+    <%= stylesheet_link_tag 'risks', :plugin => plugin_name %>
 <% end %>
 
 <%= render :partial => 'action_menu' %>

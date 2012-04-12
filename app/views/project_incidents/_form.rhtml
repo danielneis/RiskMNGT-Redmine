@@ -1,54 +1,30 @@
+<% plugin_name = File.basename(File.expand_path("../../..", File.dirname(__FILE__))) %>
 <% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'risks', :plugin => 'redmine_risks' %>
-    <%= javascript_include_tag 'risks', :plugin => 'redmine_risks' %>
+    <%= stylesheet_link_tag 'risks', :plugin => plugin_name %>
+    <%= javascript_include_tag 'risks', :plugin => plugin_name %>
 <% end %>
-
 
 <%= error_messages_for :incident %>
 
 <div id="main_o" class="box tabular">
 
-<p>	
-	<%= f.text_field :name, :required => true %>
-</p>
+<p><%= f.text_field :name, :required => true %></p>
+<p><%= f.select :impact,  level_choices , :required => true %></p>
+<p><%= f.text_field :open_datetime, :size => 10 %><%= calendar_for('incident_open_datetime') %></p>
+<p><%= f.text_field :closed_datetime, :size => 10 %><%= calendar_for('incident_closed_datetime') %></p>
+<p><%= f.text_area :description, :class=>'risks-description-edit' %></p>
 
-<p>		
-	<%= f.select :impact,  level_choices , :required => true %>						                                                      					
-</p>
-
-<p>
-	<%= f.text_field :open_datetime, :size => 10 %><%= calendar_for('incident_open_datetime') %>
-</p>
-
-<p>
-	<%= f.text_field :closed_datetime, :size => 10 %><%= calendar_for('incident_closed_datetime') %>
-</p>
-
-<p>			
-	<%= f.text_area :description, :class=>'risks-description-edit' %>
-</p>
-
-
-
-
-<div class="contextual">	
-	<%= link_to l(:field_correction), "#" ,:onclick => 'toggle_visibility("correction-div");' %>
+<div class="contextual"> 
+ <%= link_to l(:field_correction), "#" ,:onclick => 'toggle_visibility("correction-div");' %>
 </div>
-<hr><p/></hr>
-
+<hr/>
 
 <div id="correction-div" style="display:none;">
-	<p><%= f.select :correction_status,  correction_status_choices , :selected => @incident.correction_status.to_i   , :required => true %></p>
-	<p><%= f.text_field :resolution_datetime, :size => 10 %><%= calendar_for('incident_resolution_datetime') %></p>
-	<p><%= f.text_area :correction, :class=>'wiki-edit' %></p>
-	<p><%= f.text_field :correction_responsable, :size=>100 %></p>
+ <p><%= f.select :correction_status,  correction_status_choices , :selected => @incident.correction_status.to_i   , :required => true %></p>
+ <p><%= f.text_field :resolution_datetime, :size => 10 %><%= calendar_for('incident_resolution_datetime') %></p>
+ <p><%= f.text_area :correction, :class=>'wiki-edit' %></p>
+ <p><%= f.text_field :correction_responsable, :size=>100 %></p>
 </div>
 
-
 </div>
-
 <%= wikitoolbar_for 'incident_correction' %>
-
-
-
-

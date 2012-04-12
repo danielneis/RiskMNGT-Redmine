@@ -1,19 +1,12 @@
+<% plugin_name = File.basename(File.expand_path("../../..", File.dirname(__FILE__))) %>
 <% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'risks', :plugin => 'redmine_risks' %>
+    <%= stylesheet_link_tag 'risks', :plugin => plugin_name %>
 <% end %>
 
 <%= error_messages_for :category %>
 
 <div class="box tabular">
-
-<p>
-	<%= f.text_field :name, :required => true %>
-</p>
-<p>		
-	<%= f.select :status,  category_status_choices , :selected => @category.status.to_i   , :required => true %>						                                                      					
-</p>
-<p>	
-	<%= f.text_area :description, :class=>'risks-description-edit' %>	
-</p>
-
+<p><%= f.text_field :name, :required => true %></p>
+<p><%= f.select :status,  category_status_choices , :selected => @category.status.to_i   , :required => true %></p>
+<p><%= f.text_area :description, :class=>'risks-description-edit' %></p>
 </div>

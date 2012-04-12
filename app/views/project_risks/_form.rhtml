@@ -1,89 +1,59 @@
+<% plugin_name = File.basename(File.expand_path("../../..", File.dirname(__FILE__))) %>
 <% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'risks', :plugin => 'redmine_risks' %>
-    <%= javascript_include_tag 'risks', :plugin => 'redmine_risks' %>
+    <%= stylesheet_link_tag 'risks', :plugin => plugin_name %>
+    <%= javascript_include_tag 'risks', :plugin => plugin_name %>
 <% end %>
-
 
 <%= error_messages_for :project_risk %>
 
 <div id="main_o" class="box tabular">
 
-<p>	
-	<%= f.text_field :name, :required => true %>
-</p>
-
-<p>		
-	<%= f.select :impact,  level_choices , :required => true %>						                                                      					
-</p>
-
-<p>		
-	<%= f.select :probability,  level_choices  , :required => true %>						                                                      					
-</p>
-
-<p>
-	<%= f.text_field :detection_datetime, :size => 10 %><%= calendar_for('project_risk_detection_datetime') %>
-</p>
-
-<p>
-	<%= f.text_field :closed_datetime, :size => 10 %><%= calendar_for('project_risk_closed_datetime') %>
-</p>
+<p><%= f.text_field :name, :required => true %> </p>
+<p><%= f.select :impact,  level_choices , :required => true %></p>
+<p><%= f.select :probability,  level_choices  , :required => true %></p>
+<p><%= f.text_field :detection_datetime, :size => 10 %><%= calendar_for('project_risk_detection_datetime') %> </p>
+<p><%= f.text_field :closed_datetime, :size => 10 %><%= calendar_for('project_risk_closed_datetime') %> </p>
 
 <% unless @select_categories.nil? %>
 
 <p><%= f.select :risk_category_id , (@select_categories.collect {|u| [u.name,u.id]}) , :required => true %></p>
 
-<%= observe_field :project_risk_risk_category_id,		
-		  :url => { :action => 'update_selectable_risks', :project_risk_id => @project_risk.id },		   		
-		  :update => :select_risk,
-		  :with => 'project_risk_risk_category_id'
-		  %>
+<%= observe_field :project_risk_risk_category_id,  
+    :url => { :action => 'update_selectable_risks', :project_risk_id => @project_risk.id },       
+    :update => :select_risk,
+    :with => 'project_risk_risk_category_id'
+    %>
 
 <% end %>
 
 <div id="select_risk" >
-	<%= render :partial => 'select_risk', :locals => {  :selectable_risks => @select_risks, :f=>@project_risk } %>
+ <%= render :partial => 'select_risk', :locals => {  :selectable_risks => @select_risks, :f=>@project_risk } %>
 </div>
 
-<p>			
-	<%= f.text_area :description, :class=>'risks-description-edit' %>
-</p>
+<p><%= f.text_area :description, :class=>'risks-description-edit' %></p>
 
-
-
-
-<div class="contextual">	
-	<%= link_to l(:field_mitigation), "#" ,:onclick => 'toggle_visibility("mitigation-div");' %>
+<div class="contextual"> 
+ <%= link_to l(:field_mitigation), "#" ,:onclick => 'toggle_visibility("mitigation-div");' %>
 </div>
-<hr><p/></hr>
-
+<hr/>
 
 <div id="mitigation-div" style="display:none;">
-	<p><%= f.select :mitigation_status,  mitigation_status_choices , :selected => @project_risk.mitigation_status.to_i   , :required => true %></p>
-	<p><%= f.text_field :resolution_datetime, :size => 10 %><%= calendar_for('project_risk_resolution_datetime') %></p>
-	<p><%= f.text_area :mitigation, :class=>'wiki-edit' %></p>
+ <p><%= f.select :mitigation_status,  mitigation_status_choices , :selected => @project_risk.mitigation_status.to_i   , :required => true %></p>
+ <p><%= f.text_field :resolution_datetime, :size => 10 %><%= calendar_for('project_risk_resolution_datetime') %></p>
+ <p><%= f.text_area :mitigation, :class=>'wiki-edit' %></p>
 </div>
 
-
-
-
-
-
-<div  class="contextual">	
-	<%= link_to l(:field_contingency), "#" ,:onclick => 'toggle_visibility("contingency-div");' %>	
+<div  class="contextual"> 
+ <%= link_to l(:field_contingency), "#" ,:onclick => 'toggle_visibility("contingency-div");' %> 
 </div>
-<hr/><p/></hr>
+<hr/>
 
 <div id="contingency-div" style="display:none;">
-	<p><%= f.text_area :contingency, :class=>'wiki-edit' %></p>
-	<p><%= f.text_field :contingency_responsable, :size=>100 %></p>
+ <p><%= f.text_area :contingency, :class=>'wiki-edit' %></p>
+ <p><%= f.text_field :contingency_responsable, :size=>100 %></p>
 </div>
-
-
 
 </div>
 
 <%= wikitoolbar_for 'project_risk_mitigation' %>
 <%= wikitoolbar_for 'project_risk_contingency' %>
-
-
-

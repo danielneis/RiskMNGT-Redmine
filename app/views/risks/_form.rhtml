@@ -1,38 +1,20 @@
+<% plugin_name = File.basename(File.expand_path("../../..", File.dirname(__FILE__))) %>
 <% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'risks', :plugin => 'redmine_risks' %>
+    <%= stylesheet_link_tag 'risks', :plugin => plugin_name %>
 <% end %>
-
 
 <%= error_messages_for :risk %>
 
 <div class="box tabular">
 
-<p>	
-	<%= f.text_field :name, :required => true %>
-</p>
-
-<p>		
-	<%= f.select :status,  risk_status_choices , :selected => @risk.status.to_i   , :required => true %>						                                                      					
-</p>
-
-<p>				
-	<%= f.select :risk_category_id , (@select_categories.collect {|u| [u.name,u.id]}) , :required => true %> 			
-</p>
-
-<p>			
-	<%= f.text_area :description, :class=>'risks-description-edit' %>
-</p>
-
-<p>	
-	<%= f.text_area :mitigation, :class=>'wiki-edit' %>
-</p>
-
-<p>	
-	<%= f.text_area :contingency, :class=>'wiki-edit' %>
-</p>
+<p><%= f.text_field :name, :required => true %></p>
+<p><%= f.select :status,  risk_status_choices , :selected => @risk.status.to_i   , :required => true %></p>
+<p><%= f.select :risk_category_id , (@select_categories.collect {|u| [u.name,u.id]}) , :required => true %></p>
+<p><%= f.text_area :description, :class=>'risks-description-edit' %></p>
+<p><%= f.text_area :mitigation, :class=>'wiki-edit' %></p>
+<p><%= f.text_area :contingency, :class=>'wiki-edit' %></p>
 
 </div>
 
 <%= wikitoolbar_for 'risk_mitigation' %>
 <%= wikitoolbar_for 'risk_contingency' %>
-
